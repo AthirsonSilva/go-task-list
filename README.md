@@ -4,7 +4,7 @@ Simple web Restful API made with Golang and Gin
 ## Prerequisites
 
 - Go 1.20 or higher
-- MongoFB (or any other preferred database)
+- MongoDB (or any other preferred database)
 - [Gin](https://gin-gonic.com/) (Go router and dispatcher)
 
 ## Getting Started
