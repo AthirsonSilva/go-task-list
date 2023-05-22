@@ -7,19 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type album struct {
-	ID     string  `json:"id"`
-	Title  string  `json:"title"`
-	Artist string  `json:"artist"`
-	Price  float64 `json:"price"`
-}
-
-var albums = []album{
-	{ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
-	{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
-	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
-}
-
 func main() {
 	database.Database.Connect()
 
@@ -28,6 +15,10 @@ func main() {
 	v1 := router.Group("/api/v1/albums")
 	{
 		v1.GET("/", routes.FindAll)
+		v1.GET("/:id", routes.FindOne)
+		v1.POST("/", routes.Create)
+		v1.PUT("/:id", routes.Update)
+		v1.DELETE("/:id", routes.Delete)
 	}
 
 	router.Run("localhost:8000")
