@@ -1,23 +1,24 @@
-# golang-rest-api
-Simple web Restful API made with Golang and Gin
+# Music streaming API
+
+Simple Web Restful API made with Golang, MongoDB and Echo framework
 
 ## Prerequisites
 
-- Go 1.20 or higher
+- Go 1.22 or higher
 - MongoDB (or any other preferred database)
-- [Gin](https://gin-gonic.com/) (Go router and dispatcher)
 
 ## Getting Started
 
 #### Clone the repository:
+
 ```
-git clone https://github.com/athirsonsilva/go-gin-api.git
+git clone https://github.com/athirsonsilva/music-streaming-api.git
 ```
-   
+
 #### Navigate to the project directory:
 
 ```
-cd go-gin-api
+cd music-streaming-api
 ```
 
 #### Install the dependencies:
@@ -30,7 +31,7 @@ go mod download
 
 ```
 go build
-./go-gin-api
+./music-streaming-api
 ```
 
 #### The API will start running on http://localhost:8080.

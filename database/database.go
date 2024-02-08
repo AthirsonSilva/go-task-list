@@ -12,8 +12,10 @@ type DatabaseInstance struct {
 	Client *mongo.Client
 }
 
-var Database *DatabaseInstance
-var Collection *mongo.Collection
+var (
+	Database   *DatabaseInstance
+	Collection *mongo.Collection
+)
 
 func (db *DatabaseInstance) Connect() {
 	log.Println("Connecting to MongoDB...")
@@ -23,7 +25,6 @@ func (db *DatabaseInstance) Connect() {
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +39,7 @@ func (db *DatabaseInstance) Connect() {
 	log.Println("Connected to MongoDB!")
 
 	// Get the collection as ref
-	collection := client.Database("go-rest").Collection("albums")
+	collection := client.Database("music-api").Collection("albums")
 
 	// Assign the collection to the database
 	Database = &DatabaseInstance{Client: client}
