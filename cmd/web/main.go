@@ -9,13 +9,15 @@ import (
 func main() {
 	database.Database.Connect()
 
-	router := echo.New()
+	server := echo.New()
 
-	router.GET("/api/v1/albums", routes.FindAll)
-	router.GET("/api/v1/albums/:id", routes.FindOne)
-	router.POST("/api/v1/albums", routes.Create)
-	router.PUT("/api/v1/albums/:id", routes.Update)
-	router.DELETE("/api/v1/albums/:id", routes.Delete)
+	albums := server.Group("/api/v1/albums")
 
-	router.Logger.Fatal(router.Start(":8080"))
+	albums.GET("/", routes.FindAll)
+	albums.GET("/:id", routes.FindOne)
+	albums.POST("/", routes.Create)
+	albums.PUT("/:id", routes.Update)
+	albums.DELETE(":id", routes.Delete)
+
+	server.Logger.Fatal(server.Start(":8080"))
 }
