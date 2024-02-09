@@ -1,9 +1,8 @@
 package main
 
 import (
-	"go-mongo/database"
-	"go-mongo/routes"
-
+	"github.com/AthirsonSilva/music-streaming-api/database"
+	"github.com/AthirsonSilva/music-streaming-api/routes"
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,14 +11,11 @@ func main() {
 
 	router := echo.New()
 
-	v1 := router.Group("/api/v1/albums")
-	{
-		v1.GET("/", routes.FindAll)
-		v1.GET("/:id", routes.FindOne)
-		v1.POST("/", routes.Create)
-		v1.PUT("/:id", routes.Update)
-		v1.DELETE("/:id", routes.Delete)
-	}
+	router.GET("/api/v1/albums", routes.FindAll)
+	router.GET("/api/v1/albums/:id", routes.FindOne)
+	router.POST("/api/v1/albums", routes.Create)
+	router.PUT("/api/v1/albums/:id", routes.Update)
+	router.DELETE("/api/v1/albums/:id", routes.Delete)
 
-	router.Run("localhost:8000")
+	router.Logger.Fatal(router.Start(":8080"))
 }

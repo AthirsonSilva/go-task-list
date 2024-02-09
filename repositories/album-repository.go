@@ -2,11 +2,11 @@ package repositories
 
 import (
 	"context"
-	"go-mongo/database"
-	"go-mongo/models"
 	"log"
 	"time"
 
+	"github.com/AthirsonSilva/music-streaming-api/database"
+	"github.com/AthirsonSilva/music-streaming-api/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,7 +16,6 @@ func FindAll() ([]models.Album, error) {
 
 	// Get all albums from the database
 	cursor, err := database.Collection.Find(context.Background(), bson.D{})
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +38,6 @@ func FindById(id string) (models.Album, error) {
 
 	// Get album from the database
 	err := database.Collection.FindOne(context.Background(), bson.D{}).Decode(&album)
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +54,6 @@ func Create(album models.Album) (models.Album, error) {
 
 	// Insert album in the database
 	_, err := database.Collection.InsertOne(context.Background(), album)
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,14 +65,12 @@ func Create(album models.Album) (models.Album, error) {
 func Update(id string, album models.Album) (models.Album, error) {
 	// Convert the id string to a MongoDB ObjectId
 	oid, err := primitive.ObjectIDFromHex(id)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Check if album exists in the database
 	err = database.Collection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
-
 	if err != nil {
 		return album, err
 	}
@@ -85,8 +80,11 @@ func Update(id string, album models.Album) (models.Album, error) {
 	album.ID = oid
 
 	// Update album in the database
-	_, err = database.Collection.UpdateOne(context.Background(), bson.M{"_id": oid}, bson.D{{Key: "$set", Value: album}})
-
+	_, err = database.Collection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": oid},
+		bson.D{{Key: "$set", Value: album}},
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,21 +96,18 @@ func Update(id string, album models.Album) (models.Album, error) {
 func Delete(id string) error {
 	// Convert the id string to a MongoDB ObjectId
 	oid, err := primitive.ObjectIDFromHex(id)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Check if album exists in the database
 	err = database.Collection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
-
 	if err != nil {
 		return err
 	}
 
 	// Delete album in the database
 	_, err = database.Collection.DeleteOne(context.Background(), bson.M{"_id": oid})
-
 	if err != nil {
 		log.Fatal(err)
 	}

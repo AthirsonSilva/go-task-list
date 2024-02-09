@@ -1,4 +1,4 @@
-module music-streaming-api
+module github.com/AthirsonSilva/music-streaming-api
 
 go 1.22
 
