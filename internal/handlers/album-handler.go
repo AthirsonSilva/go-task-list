@@ -18,16 +18,7 @@ func FindAll(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 400)
-		return
-	}
-
-	if len(albums) == 0 {
-		response = api.Response{
-			Message: "No albums found",
-			Data:    nil,
-		}
-		api.JSON(res, response, 400)
+		api.JSON(res, response, http.StatusInternalServerError)
 		return
 	}
 
@@ -41,7 +32,7 @@ func FindAll(res http.ResponseWriter, req *http.Request) {
 		Message: "Albums found",
 		Data:    albumsResponse,
 	}
-	api.JSON(res, response, 200)
+	api.JSON(res, response, http.StatusOK)
 }
 
 func FindOne(res http.ResponseWriter, req *http.Request) {
@@ -54,7 +45,7 @@ func FindOne(res http.ResponseWriter, req *http.Request) {
 			Message: "ID is required",
 			Data:    nil,
 		}
-		api.JSON(res, response, 400)
+		api.JSON(res, response, http.StatusBadRequest)
 		return
 	}
 
@@ -64,7 +55,7 @@ func FindOne(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 500)
+		api.JSON(res, response, http.StatusInternalServerError)
 		return
 	}
 
@@ -73,8 +64,7 @@ func FindOne(res http.ResponseWriter, req *http.Request) {
 		Message: "Album found",
 		Data:    albumResponse,
 	}
-	api.JSON(res, response, 200)
-	return
+	api.JSON(res, response, http.StatusOK)
 }
 
 func Create(res http.ResponseWriter, req *http.Request) {
@@ -86,7 +76,7 @@ func Create(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 400)
+		api.JSON(res, response, http.StatusBadRequest)
 		return
 	}
 
@@ -97,7 +87,7 @@ func Create(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 500)
+		api.JSON(res, response, http.StatusInternalServerError)
 		return
 	}
 
@@ -105,7 +95,7 @@ func Create(res http.ResponseWriter, req *http.Request) {
 		Message: "Album created",
 		Data:    album,
 	}
-	api.JSON(res, response, 201)
+	api.JSON(res, response, http.StatusCreated)
 }
 
 func Update(res http.ResponseWriter, req *http.Request) {
@@ -117,7 +107,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 400)
+		api.JSON(res, response, http.StatusBadRequest)
 		return
 	}
 
@@ -127,7 +117,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 			Message: "ID is required",
 			Data:    nil,
 		}
-		api.JSON(res, response, 400)
+		api.JSON(res, response, http.StatusBadRequest)
 		return
 	}
 
@@ -138,7 +128,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 500)
+		api.JSON(res, response, http.StatusInternalServerError)
 		return
 	}
 
@@ -146,7 +136,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 		Message: "Album updated",
 		Data:    album,
 	}
-	api.JSON(res, response, 200)
+	api.JSON(res, response, http.StatusOK)
 }
 
 func Delete(res http.ResponseWriter, req *http.Request) {
@@ -158,7 +148,7 @@ func Delete(res http.ResponseWriter, req *http.Request) {
 			Message: "ID is required",
 			Data:    nil,
 		}
-		api.JSON(res, response, 400)
+		api.JSON(res, response, http.StatusBadRequest)
 		return
 	}
 
@@ -168,7 +158,7 @@ func Delete(res http.ResponseWriter, req *http.Request) {
 			Message: err.Error(),
 			Data:    nil,
 		}
-		api.JSON(res, response, 500)
+		api.JSON(res, response, http.StatusInternalServerError)
 		return
 	}
 
@@ -176,5 +166,5 @@ func Delete(res http.ResponseWriter, req *http.Request) {
 		Message: "Album deleted",
 		Data:    nil,
 	}
-	api.JSON(res, response, 200)
+	api.JSON(res, response, http.StatusOK)
 }
