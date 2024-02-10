@@ -5,7 +5,7 @@ Simple Web Restful API made with Golang, MongoDB and Echo framework
 ## Prerequisites
 
 - Go 1.22 or higher
-- MongoDB (or any other preferred database)
+- MongoDB 
 
 ## Project Features
 
@@ -13,10 +13,9 @@ Simple Web Restful API made with Golang, MongoDB and Echo framework
 | ------------------------------ | ------------ |
 | Consistent API design          | 🔴 Ready     |
 | Use of DTOs                    | 🟢 Ready     |
-| Use of HATEOAS                 | 🔴 Not Ready |
 | Authentication with JWT        | 🔴 Not Ready |
 | Caching with Redis             | 🔴 Not Ready |
-| Documentation with SwaggerUI   | 🔴 Not Ready |
+| Documentation with SwaggerUI   | 🟢 Ready     |
 | Pagination and sorting         | 🔴 Not Ready |
 | Mailing service                | 🔴 Not Ready |
 | Data generation                | 🔴 Not Ready |
