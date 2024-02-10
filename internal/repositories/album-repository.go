@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/AthirsonSilva/music-streaming-api/database"
-	"github.com/AthirsonSilva/music-streaming-api/models"
+	"github.com/AthirsonSilva/music-streaming-api/internal/database"
+	"github.com/AthirsonSilva/music-streaming-api/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

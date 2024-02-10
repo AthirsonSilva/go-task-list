@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/AthirsonSilva/music-streaming-api/models"
-	"github.com/AthirsonSilva/music-streaming-api/repositories"
+	"github.com/AthirsonSilva/music-streaming-api/internal/models"
+	"github.com/AthirsonSilva/music-streaming-api/internal/repositories"
 	"github.com/labstack/echo/v4"
 )
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/AthirsonSilva/music-streaming-api/database"
-	"github.com/AthirsonSilva/music-streaming-api/handlers"
+	"github.com/AthirsonSilva/music-streaming-api/internal/database"
+	"github.com/AthirsonSilva/music-streaming-api/internal/handlers"
 	"github.com/labstack/echo/v4"
 )
 
