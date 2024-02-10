@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/AthirsonSilva/music-streaming-api/docs"
-	"github.com/AthirsonSilva/music-streaming-api/internal/database"
-	"github.com/AthirsonSilva/music-streaming-api/internal/routes"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
+	_ "github.com/AthirsonSilva/music-streaming-api/cmd/server/docs"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/routes"
 )
 
 const port = ":8080"

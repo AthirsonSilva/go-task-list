@@ -1,0 +1,176 @@
+basePath: /
+definitions:
+  api.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  models.AlbumRequest:
+    properties:
+      artist:
+        type: string
+      price:
+        type: number
+      title:
+        type: string
+    required:
+    - artist
+    - price
+    - title
+    type: object
+info:
+  contact: {}
+  description: Swagger API for Golang Project Music Streaming API
+  license:
+    name: MIT
+    url: https://github.com/AthrsonsSilva/music-streaming-api
+  termsOfService: http://swagger.io/terms/
+  title: Music Streaming Swagger API
+  version: "1.0"
+paths:
+  /api/v1/albums:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Find all albums
+      tags:
+      - albums
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Album request
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.AlbumRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Creates an album
+      tags:
+      - albums
+  /api/v1/albums/{id}:
+    delete:
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Deletes an album
+      tags:
+      - albums
+    get:
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Find one album by ID
+      tags:
+      - albums
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Album request
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.AlbumRequest'
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Find all albums
+      tags:
+      - albums
+swagger: "2.0"
