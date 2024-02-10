@@ -1,23 +1,26 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/AthirsonSilva/music-streaming-api/internal/database"
-	"github.com/AthirsonSilva/music-streaming-api/internal/handlers"
-	"github.com/labstack/echo/v4"
+	"github.com/AthirsonSilva/music-streaming-api/internal/routes"
 )
+
+const port = ":8080"
 
 func main() {
 	database.Database.Connect()
 
-	server := echo.New()
+	server := &http.Server{
+		Addr:    port,
+		Handler: routes.Routes(),
+	}
 
-	albums := server.Group("/api/v1/albums")
+	log.Printf("Server running on port %s", port)
 
-	albums.GET("/", handlers.FindAll)
-	albums.GET("/:id", handlers.FindOne)
-	albums.POST("/", handlers.Create)
-	albums.PUT("/:id", handlers.Update)
-	albums.DELETE(":id", handlers.Delete)
-
-	server.Logger.Fatal(server.Start(":8080"))
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
 }
