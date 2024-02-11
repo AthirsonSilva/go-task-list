@@ -3,6 +3,7 @@ package middlewares
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
@@ -60,10 +61,17 @@ func VerifyAuthentication(next http.Handler) http.Handler {
 				}
 				api.JSON(res, response, http.StatusUnauthorized)
 				return
+			} else if time.Until(claims.ExpiresAt.Time) < 0 {
+				response := api.Response{
+					Message: "Provided token is expired",
+					Data:    nil,
+				}
+				api.JSON(res, response, http.StatusUnauthorized)
+				return
 			}
 		}
 
-		log.Printf("User logged: %s", claims.Username)
+		log.Printf("User logged in: %s", claims.Username)
 		next.ServeHTTP(res, req)
 	})
 }
