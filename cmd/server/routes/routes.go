@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	albums "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/albums"
+	users "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/users"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/middlewares"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -21,13 +22,23 @@ func Routes() http.Handler {
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))
 
-	router.Route("/api/v1/albums", func(router chi.Router) {
-		router.Get("/", albums.FindAll)
-		router.Get("/{id}", albums.FindOne)
-		router.Post("/", albums.Create)
-		router.Put("/{id}", albums.Update)
-		router.Delete("/{id}", albums.Delete)
-	})
+	router.Route("/api/v1/albums", AlbumRoutes)
+	router.Route("/api/v1/users", UserRoutes)
 
 	return router
+}
+
+func AlbumRoutes(router chi.Router) {
+	router.Use(middlewares.VerifyAuthentication)
+	router.Get("/", albums.FindAllAlbums)
+	router.Get("/{id}", albums.FindOneAlbumById)
+	router.Post("/", albums.CreateAlbum)
+	router.Put("/{id}", albums.UpdateAlbumById)
+	router.Delete("/{id}", albums.DeleteAlbumById)
+}
+
+func UserRoutes(router chi.Router) {
+	router.Get("/{id}", users.FindOneUserById)
+	router.Post("/signup", users.SignUp)
+	router.Post("/signin", users.SignIn)
 }

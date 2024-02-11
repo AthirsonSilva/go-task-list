@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/api"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 )
 
 // @Summary Find all albums
@@ -14,12 +14,13 @@ import (
 // @Produce  application/json
 // @Param album body models.AlbumRequest true "Album request"
 // @Param id path string true "Album ID"
+// @Param Authorization header string true "Authorization"
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
 // @Failure 404 {object} api.Response
 // @Router /api/v1/albums/{id} [put]
-func Update(res http.ResponseWriter, req *http.Request) {
+func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest
 	var response api.Response
 
@@ -43,7 +44,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 	}
 
 	album := request.ToModel()
-	album, err := repositories.Update(id, album)
+	album, err := repositories.UpdateAlbumById(id, album)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),

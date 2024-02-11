@@ -1,4 +1,4 @@
-package handlers
+package users
 
 import (
 	"net/http"
@@ -7,17 +7,16 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 )
 
-// @Summary Find one album by ID
-// @Tags albums
+// @Summary Find one user by ID
+// @Tags users
 // @Produce  json
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
 // @Failure 404 {object} api.Response
-// @Param id path string true "Album ID"
-// @Param Authorization header string true "Authorization"
-// @Router /api/v1/albums/{id} [get]
-func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
+// @Param id path string true "User ID"
+// @Router /api/v1/users/{id} [get]
+func FindOneUserById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)
 	var response api.Response
 
@@ -30,7 +29,7 @@ func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	album, err := repositories.FindAlbumById(id)
+	user, err := repositories.FindUserById(id)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),
@@ -40,10 +39,10 @@ func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	albumResponse := album.ToResponse()
+	userResponse := user.ToResponse()
 	response = api.Response{
-		Message: "Album found",
-		Data:    albumResponse,
+		Message: "User found",
+		Data:    userResponse,
 	}
 	api.JSON(res, response, http.StatusOK)
 }

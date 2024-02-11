@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/api"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 )
 
 // @Summary Find all albums
@@ -14,9 +14,10 @@ import (
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
+// @Param Authorization header string true "Authorization"
 // @Router /api/v1/albums [get]
-func FindAll(res http.ResponseWriter, req *http.Request) {
-	albums, err := repositories.FindAll()
+func FindAllAlbums(res http.ResponseWriter, req *http.Request) {
+	albums, err := repositories.FindAllAlbums()
 	var response api.Response
 
 	if err != nil {

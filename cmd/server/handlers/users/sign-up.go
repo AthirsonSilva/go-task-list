@@ -1,4 +1,4 @@
-package handlers
+package users
 
 import (
 	"net/http"
@@ -8,18 +8,17 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 )
 
-// @Summary Creates an album
-// @Tags albums
+// @Summary Creates an user
+// @Tags users
 // @Accept  application/json
 // @Produce  application/json
-// @Param album body models.AlbumRequest true "Album request"
+// @Param user body models.UserRequest true "User request"
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
-// @Param Authorization header string true "Authorization"
-// @Router /api/v1/albums [post]
-func CreateAlbum(res http.ResponseWriter, req *http.Request) {
-	var request models.AlbumRequest
+// @Router /api/v1/users/signup [post]
+func SignUp(res http.ResponseWriter, req *http.Request) {
+	var request models.UserRequest
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
@@ -31,8 +30,8 @@ func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	album := request.ToModel()
-	album, err := repositories.CreateAlbum(album)
+	user := request.ToModel()
+	user, err := repositories.CreateUser(user)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),
@@ -43,8 +42,8 @@ func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 	}
 
 	response = api.Response{
-		Message: "Album created",
-		Data:    album,
+		Message: "User created",
+		Data:    user,
 	}
 	api.JSON(res, response, http.StatusCreated)
 }

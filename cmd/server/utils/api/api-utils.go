@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"net/url"
@@ -57,5 +58,20 @@ func Param(r *http.Request, param string) string {
 		return ""
 	}
 
-	return queryParams["id"][0]
+	return queryParams[param][0]
+}
+
+func AuthToken(r *http.Request) (string, error) {
+	auth := r.Header.Get("Authorization")
+	if auth == "" {
+		return "", errors.New("authorization header not found")
+	}
+
+	auth = strings.TrimPrefix(auth, "Bearer ")
+
+	if auth == "" {
+		return "", errors.New("bearer token not found")
+	}
+
+	return auth, nil
 }

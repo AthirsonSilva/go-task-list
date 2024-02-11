@@ -6,6 +6,13 @@ definitions:
       message:
         type: string
     type: object
+  authentication.Credentials:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   models.AlbumRequest:
     properties:
       artist:
@@ -19,6 +26,15 @@ definitions:
     - price
     - title
     type: object
+  models.UserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: Swagger API for Golang Project Music Streaming API
@@ -31,6 +47,12 @@ info:
 paths:
   /api/v1/albums:
     get:
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -59,6 +81,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.AlbumRequest'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -83,6 +110,11 @@ paths:
       - description: Album ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Authorization
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -112,6 +144,11 @@ paths:
       - description: Album ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Authorization
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -151,6 +188,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -173,4 +215,92 @@ paths:
       summary: Find all albums
       tags:
       - albums
+  /api/v1/users/{id}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Find one user by ID
+      tags:
+      - users
+  /api/v1/users/signin:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: SignUp request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/authentication.Credentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: SignIn the user and returns a JWT token
+      tags:
+      - users
+  /api/v1/users/signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Creates an user
+      tags:
+      - users
 swagger: "2.0"
