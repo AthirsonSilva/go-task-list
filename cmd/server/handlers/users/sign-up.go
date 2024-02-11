@@ -16,8 +16,8 @@ import (
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
-// @Router /api/v1/users [post]
-func CreateUser(res http.ResponseWriter, req *http.Request) {
+// @Router /api/v1/users/signup [post]
+func SignUp(res http.ResponseWriter, req *http.Request) {
 	var request models.UserRequest
 	var response api.Response
 

@@ -38,5 +38,6 @@ func AlbumRoutes(router chi.Router) {
 
 func UserRoutes(router chi.Router) {
 	router.Get("/{id}", users.FindOneUserById)
-	router.Post("/", users.CreateUser)
+	router.Post("/signup", users.SignUp)
+	router.Post("/signin", users.SignIn)
 }
