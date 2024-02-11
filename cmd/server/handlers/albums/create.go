@@ -16,6 +16,7 @@ import (
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
+// @Param Authorization header string true "Authorization"
 // @Router /api/v1/albums [post]
 func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest

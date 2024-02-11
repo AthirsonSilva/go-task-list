@@ -60,7 +60,7 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	// Declare the expiration time of the token
 	// here, we have kept it as 5 minutes
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(24 * time.Hour)
 
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &authentication.Claims{

@@ -15,6 +15,7 @@ import (
 // @Failure 400 {object} api.Response
 // @Failure 404 {object} api.Response
 // @Param id path string true "Album ID"
+// @Param Authorization header string true "Authorization"
 // @Router /api/v1/albums/{id} [delete]
 func DeleteAlbumById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)

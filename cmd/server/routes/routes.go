@@ -29,6 +29,7 @@ func Routes() http.Handler {
 }
 
 func AlbumRoutes(router chi.Router) {
+	router.Use(middlewares.VerifyAuthentication)
 	router.Get("/", albums.FindAllAlbums)
 	router.Get("/{id}", albums.FindOneAlbumById)
 	router.Post("/", albums.CreateAlbum)

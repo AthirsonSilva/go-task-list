@@ -14,6 +14,7 @@ import (
 // @Produce  application/json
 // @Param album body models.AlbumRequest true "Album request"
 // @Param id path string true "Album ID"
+// @Param Authorization header string true "Authorization"
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response

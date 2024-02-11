@@ -16,10 +16,8 @@ const port = ":8080"
 // @author Athirson Silva
 // @description Swagger API for Golang Project Music Streaming API
 // @termsOfService http://swagger.io/terms/
-
 // @license.name MIT
 // @license.url https://github.com/AthrsonsSilva/music-streaming-api
-
 // @BasePath /
 func main() {
 	database.Database.Connect()
