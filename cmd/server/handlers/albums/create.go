@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/api"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 )
 
 // @Summary Creates an album

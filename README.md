@@ -1,6 +1,6 @@
 # Music streaming API
 
-Simple Web Restful API made with Golang, MongoDB and Echo framework
+Simple Web Restful API made with Golang, MongoDB and Chi framework
 
 ## Prerequisites
 
