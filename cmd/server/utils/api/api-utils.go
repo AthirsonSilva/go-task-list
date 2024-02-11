@@ -57,5 +57,20 @@ func Param(r *http.Request, param string) string {
 		return ""
 	}
 
-	return queryParams["id"][0]
+	return queryParams[param][0]
+}
+
+func AuthToken(r *http.Request) string {
+	auth := r.Header.Get("Authorization")
+	if auth == "" {
+		return ""
+	}
+
+	auth = strings.TrimPrefix(auth, "Bearer ")
+
+	if auth == "" {
+		return ""
+	}
+
+	return auth
 }

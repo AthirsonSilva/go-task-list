@@ -19,7 +19,7 @@ import (
 // @Failure 400 {object} api.Response
 // @Failure 404 {object} api.Response
 // @Router /api/v1/albums/{id} [put]
-func Update(res http.ResponseWriter, req *http.Request) {
+func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest
 	var response api.Response
 
@@ -43,7 +43,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 	}
 
 	album := request.ToModel()
-	album, err := repositories.Update(id, album)
+	album, err := repositories.UpdateAlbumById(id, album)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),

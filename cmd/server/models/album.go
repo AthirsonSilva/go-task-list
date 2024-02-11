@@ -32,23 +32,19 @@ type AlbumResponse struct {
 
 func (a *AlbumRequest) ToModel() Album {
 	var album Album
-
 	album.Title = a.Title
 	album.Artist = a.Artist
 	album.Price = a.Price
-
 	return album
 }
 
 func (a *Album) ToResponse() AlbumResponse {
 	var album AlbumResponse
-
 	album.ID = a.ID
 	album.Title = a.Title
 	album.Artist = a.Artist
 	album.Price = a.Price
 	album.CreatedAt = a.CreatedAt
 	album.UpdatedAt = a.UpdatedAt
-
 	return album
 }

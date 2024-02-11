@@ -16,7 +16,7 @@ import (
 // @Failure 404 {object} api.Response
 // @Param id path string true "Album ID"
 // @Router /api/v1/albums/{id} [get]
-func FindOne(res http.ResponseWriter, req *http.Request) {
+func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)
 	var response api.Response
 
@@ -29,7 +29,7 @@ func FindOne(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	album, err := repositories.FindById(id)
+	album, err := repositories.FindAlbumById(id)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),

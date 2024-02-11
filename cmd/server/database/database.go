@@ -13,8 +13,9 @@ type DatabaseInstance struct {
 }
 
 var (
-	Database   *DatabaseInstance
-	Collection *mongo.Collection
+	Database        *DatabaseInstance
+	AlbumCollection *mongo.Collection
+	UserCollection  *mongo.Collection
 )
 
 func (db *DatabaseInstance) Connect() {
@@ -35,9 +36,8 @@ func (db *DatabaseInstance) Connect() {
 
 	log.Println("Connected to MongoDB!")
 
-	collection := client.Database("music-api").Collection("albums")
+	AlbumCollection = client.Database("music-api").Collection("albums")
+	UserCollection = client.Database("music-api").Collection("users")
 
 	Database = &DatabaseInstance{Client: client}
-
-	Collection = collection
 }

@@ -16,7 +16,7 @@ import (
 // @Failure 404 {object} api.Response
 // @Param id path string true "Album ID"
 // @Router /api/v1/albums/{id} [delete]
-func Delete(res http.ResponseWriter, req *http.Request) {
+func DeleteAlbumById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)
 	var response api.Response
 
@@ -29,7 +29,7 @@ func Delete(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err := repositories.Delete(id)
+	err := repositories.DeleteAlbumById(id)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),
