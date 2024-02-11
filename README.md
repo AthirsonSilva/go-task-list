@@ -31,27 +31,32 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 
 #### Clone the repository:
 
-```
+```bash
 git clone https://github.com/athirsonsilva/music-streaming-api.git
 ```
 
 #### Navigate to the project directory:
 
-```
+```bash
 cd music-streaming-api
 ```
 
 #### Install the dependencies:
 
-```
+```bash
 go mod download
 ```
 
 #### Build and run the project:
 
-```
-go build
-./music-streaming-api
+```bash
+go build -o app ./cmd/server/main.go && ./app
 ```
 
 #### The API will start running on http://localhost:8080.
+
+## Documentation
+
+The API documentation is available at http://localhost:8080/swagger/index.html
+
+![Swagger UI](swagger.png)
