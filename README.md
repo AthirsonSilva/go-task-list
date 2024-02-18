@@ -20,7 +20,6 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Mailing service                      | 🔴 Not Ready |
 | Layered architecture                 | 🟢 Ready     |
 | Error Handling                       | 🟢 Ready     |
-| Unit and Integration Testing         | 🔴 Not Ready |
 | API versioning                       | 🟢 Ready     |
 | Excel, CSV and PDF exporting         | 🔴 Not Ready |
 | File upload and download             | 🔴 Not Ready |
