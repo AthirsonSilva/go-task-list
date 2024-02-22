@@ -9,6 +9,8 @@ require (
 	go.mongodb.org/mongo-driver v1.11.6
 )
 
+require github.com/brianvoe/gofakeit/v7 v7.0.1 // indirect
+
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/go-openapi/jsonpointer v0.20.2 // indirect

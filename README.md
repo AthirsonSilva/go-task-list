@@ -15,6 +15,7 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Use of DTOs                          | 🟢 Ready     |
 | Authentication with JWT              | 🟢 Ready     |
 | Caching with Redis                   | 🔴 Not Ready |
+| Data generation                      | 🔴 Not Ready |
 | Documentation with SwaggerUI         | 🟢 Ready     |
 | Pagination, sorting and searching    | 🔴 Not Ready |
 | Mailing service                      | 🔴 Not Ready |
@@ -24,7 +25,7 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Excel, CSV and PDF exporting         | 🔴 Not Ready |
 | File upload and download             | 🔴 Not Ready |
 | Rate Limiting                        | 🔴 Not Ready |
-| Data Encryption                      | 🔴 Not Ready |
+| Data Encryption                      | 🟢 Ready     |
 | Asynchronous/ brackground tasks      | 🔴 Not Ready |
 | Logging                              | 🟢 Ready     |
 | CI/ CD with Docker and Railway       | 🟢 Ready     |

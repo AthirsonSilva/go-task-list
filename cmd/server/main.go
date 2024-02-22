@@ -9,7 +9,7 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/routes"
 )
 
-const port = ":8080"
+const PORT = ":8080"
 
 // @title Music Streaming Swagger API
 // @version 1.0
@@ -23,11 +23,11 @@ func main() {
 	database.Database.Connect()
 
 	server := &http.Server{
-		Addr:    port,
+		Addr:    PORT,
 		Handler: routes.Routes(),
 	}
 
-	log.Printf("Server running on port %s", port)
+	log.Printf("Server running on port %s", PORT)
 
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)
