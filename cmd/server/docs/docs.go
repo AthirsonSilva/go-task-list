@@ -36,6 +36,30 @@ const docTemplate = `{
                         "name": "Authorization",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "page default",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "size default",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "field default",
+                        "name": "field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "direction default",
+                        "name": "direction",
+                        "in": "query"
                     }
                 ],
                 "responses": {

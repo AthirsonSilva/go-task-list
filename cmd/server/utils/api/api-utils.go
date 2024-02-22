@@ -3,15 +3,24 @@ package api
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
 type Response struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
+}
+
+type Pagination struct {
+	PageNumber    int
+	PageSize      int
+	SortDirection int
+	SortField     string
 }
 
 func JSON(w http.ResponseWriter, data Response, status int) {
@@ -36,8 +45,6 @@ func ReadBody(r *http.Request, v any) error {
 }
 
 func PathVar(r *http.Request, order int) string {
-	// id := strings.TrimPrefix(r.URL.Path, "/api/v1/"+varName+"/")
-	// return id
 	path := strings.Split(r.URL.Path, "/")
 	lastIndex := len(path) - order
 	pathVar := path[lastIndex]
@@ -47,18 +54,19 @@ func PathVar(r *http.Request, order int) string {
 func Param(r *http.Request, param string) string {
 	u, err := url.Parse(r.URL.String())
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	queryParams := u.Query()
-	log.Printf("Query params: %v", queryParams)
-
-	if len(queryParams[param]) == 0 {
-		log.Printf("Param %s not found", param)
+		log.Println(err)
 		return ""
 	}
 
-	return queryParams[param][0]
+	queryParam := u.Query().Get(param)
+	if queryParam == "" {
+		err := fmt.Sprintf("param %s not found", param)
+		log.Println(err)
+		return ""
+	}
+
+	log.Printf("Query param: %s => %s", param, queryParam)
+	return queryParam
 }
 
 func AuthToken(r *http.Request) (string, error) {
@@ -74,4 +82,66 @@ func AuthToken(r *http.Request) (string, error) {
 	}
 
 	return auth, nil
+}
+
+func GetPaginationInfo(req *http.Request) (Pagination, Response) {
+	var pagination Pagination
+	var pageNumber, pageSize, sortDirection int
+	var sortField string
+	var err error
+
+	pageNumberStr := Param(req, "page")
+	if pageNumberStr == "" {
+		pageNumberStr = "1"
+	}
+
+	pageNumber, err = strconv.Atoi(pageNumberStr)
+	if err != nil {
+		errorResponse := Response{
+			Message: err.Error(),
+			Data:    nil,
+		}
+		return pagination, errorResponse
+	}
+
+	pageSizeStr := Param(req, "size")
+	if pageSizeStr == "" {
+		pageSizeStr = "10"
+	}
+
+	pageSize, err = strconv.Atoi(pageSizeStr)
+	if err != nil {
+		errorResponse := Response{
+			Message: err.Error(),
+			Data:    nil,
+		}
+		return pagination, errorResponse
+	}
+
+	sortField = Param(req, "field")
+	if sortField == "" {
+		sortField = "created_at"
+	}
+
+	sortDirectionStr := Param(req, "direction")
+	if sortDirectionStr == "" {
+		sortDirectionStr = "-1"
+	}
+
+	sortDirection, err = strconv.Atoi(sortDirectionStr)
+	if err != nil {
+		errorResponse := Response{
+			Message: err.Error(),
+			Data:    nil,
+		}
+		return pagination, errorResponse
+	}
+
+	pagination = Pagination{
+		PageNumber:    pageNumber,
+		PageSize:      pageSize,
+		SortField:     sortField,
+		SortDirection: sortDirection,
+	}
+	return pagination, Response{}
 }
