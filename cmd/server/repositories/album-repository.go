@@ -28,7 +28,12 @@ func FindAllAlbums(pagination api.Pagination) ([]models.Album, error) {
 	var options = options.Find()
 	setFindOptions(options, pagination)
 
-	cursor, err := database.AlbumCollection.Find(context.Background(), bson.M{}, options)
+	searchParams := bson.M{}
+	if pagination.SearchName != "" {
+		searchParams["title"] = bson.M{"$regex": pagination.SearchName, "$options": "i"}
+	}
+
+	cursor, err := database.AlbumCollection.Find(context.Background(), searchParams, options)
 	if err != nil {
 		log.Fatal(err)
 	}

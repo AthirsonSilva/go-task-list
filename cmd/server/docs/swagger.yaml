@@ -53,21 +53,29 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: page default
+      - default: 1
+        description: page
         in: query
         name: page
-        type: string
-      - description: size default
+        type: integer
+      - default: 10
+        description: size
         in: query
         name: size
-        type: string
-      - description: field default
+        type: integer
+      - default: created_at
+        description: field
         in: query
         name: field
         type: string
-      - description: direction default
+      - default: -1
+        description: direction
         in: query
         name: direction
+        type: integer
+      - description: searchName
+        in: query
+        name: searchName
         type: string
       produces:
       - application/json

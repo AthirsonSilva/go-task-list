@@ -15,10 +15,11 @@ import (
 // @Failure 500 {object} api.Response
 // @Failure 400 {object} api.Response
 // @Param Authorization header string true "Authorization"
-// @Param page query string false "page default" default 1
-// @Param size query string false "size default" default 10
-// @Param field query string false "field default" default created_at
-// @Param direction query string false "direction default" default desc
+// @Param page query int false "page" default(1)
+// @Param size query int false "size" default(10)
+// @Param field query string false "field" default(created_at)
+// @Param direction query int false "direction" default(-1)
+// @Param searchName query string false "searchName"
 // @Router /api/v1/albums [get]
 func FindAllAlbums(res http.ResponseWriter, req *http.Request) {
 	var response api.Response

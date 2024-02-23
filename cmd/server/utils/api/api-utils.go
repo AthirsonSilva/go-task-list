@@ -21,6 +21,7 @@ type Pagination struct {
 	PageSize      int
 	SortDirection int
 	SortField     string
+	SearchName    string
 }
 
 func JSON(w http.ResponseWriter, data Response, status int) {
@@ -87,7 +88,7 @@ func AuthToken(r *http.Request) (string, error) {
 func GetPaginationInfo(req *http.Request) (Pagination, Response) {
 	var pagination Pagination
 	var pageNumber, pageSize, sortDirection int
-	var sortField string
+	var sortField, searchName string
 	var err error
 
 	pageNumberStr := Param(req, "page")
@@ -137,11 +138,14 @@ func GetPaginationInfo(req *http.Request) (Pagination, Response) {
 		return pagination, errorResponse
 	}
 
+	searchName = Param(req, "searchName")
+
 	pagination = Pagination{
 		PageNumber:    pageNumber,
 		PageSize:      pageSize,
 		SortField:     sortField,
 		SortDirection: sortDirection,
+		SearchName:    searchName,
 	}
 	return pagination, Response{}
 }

@@ -38,27 +38,37 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "page default",
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
                         "name": "page",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "size default",
+                        "type": "integer",
+                        "default": 10,
+                        "description": "size",
                         "name": "size",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "field default",
+                        "default": "created_at",
+                        "description": "field",
                         "name": "field",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "direction default",
+                        "type": "integer",
+                        "default": -1,
+                        "description": "direction",
                         "name": "direction",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "searchName",
+                        "name": "searchName",
                         "in": "query"
                     }
                 ],
