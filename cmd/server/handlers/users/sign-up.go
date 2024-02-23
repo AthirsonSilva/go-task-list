@@ -6,6 +6,7 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // @Summary Creates an user
@@ -30,8 +31,28 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if err := request.Validate(); err != nil {
+		response = api.Response{
+			Message: err.Error(),
+			Data:    nil,
+		}
+		api.JSON(res, response, http.StatusBadRequest)
+		return
+	}
+
 	user := request.ToModel()
-	user, err := repositories.CreateUser(user)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		response = api.Response{
+			Message: err.Error(),
+			Data:    nil,
+		}
+		api.JSON(res, response, http.StatusInternalServerError)
+		return
+	}
+
+	user.Password = string(hashedPassword)
+	user, err = repositories.CreateUser(user)
 	if err != nil {
 		response = api.Response{
 			Message: err.Error(),

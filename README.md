@@ -15,16 +15,21 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Use of DTOs                          | 🟢 Ready     |
 | Authentication with JWT              | 🟢 Ready     |
 | Caching with Redis                   | 🔴 Not Ready |
+| Data generation                      | 🟢 Ready     |
 | Documentation with SwaggerUI         | 🟢 Ready     |
-| Pagination, sorting and filtering    | 🔴 Not Ready |
+| Pagination, sorting and searching    | 🟢 Ready     |
 | Mailing service                      | 🔴 Not Ready |
 | Layered architecture                 | 🟢 Ready     |
 | Error Handling                       | 🟢 Ready     |
 | API versioning                       | 🟢 Ready     |
 | Excel, CSV and PDF exporting         | 🔴 Not Ready |
 | File upload and download             | 🔴 Not Ready |
+| Rate Limiting                        | 🔴 Not Ready |
+| Data Encryption                      | 🟢 Ready     |
+| Asynchronous/ brackground tasks      | 🔴 Not Ready |
 | Logging                              | 🟢 Ready     |
 | CI/ CD with Docker and Railway       | 🟢 Ready     |
+
 
 ## Getting Started
 

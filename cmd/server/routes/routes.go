@@ -18,6 +18,10 @@ func Routes() http.Handler {
 	router.Use(middleware.Recoverer)
 	router.Use(middlewares.WriteToConsole)
 
+	router.Get("/", func(res http.ResponseWriter, req *http.Request) {
+		http.Redirect(res, req, "/swagger/index.html", http.StatusFound)
+	})
+
 	router.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))

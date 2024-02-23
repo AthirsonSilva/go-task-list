@@ -7,14 +7,33 @@ import (
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func FindAllAlbums() ([]models.Album, error) {
-	var albums []models.Album
+func setFindOptions(options *options.FindOptions, pagination api.Pagination) {
+	options.SetLimit(int64(pagination.PageSize))
+	if pagination.PageNumber == 0 {
+		options.SetSkip(0)
+	} else {
+		options.SetSkip(int64((pagination.PageNumber - 1) * pagination.PageSize))
+	}
+	options.SetSort(bson.D{{Key: pagination.SortField, Value: pagination.SortDirection}})
+}
 
-	cursor, err := database.AlbumCollection.Find(context.Background(), bson.M{})
+func FindAllAlbums(pagination api.Pagination) ([]models.Album, error) {
+	var albums []models.Album
+	var options = options.Find()
+	setFindOptions(options, pagination)
+
+	searchParams := bson.M{}
+	if pagination.SearchName != "" {
+		searchParams["title"] = bson.M{"$regex": pagination.SearchName, "$options": "i"}
+	}
+
+	cursor, err := database.AlbumCollection.Find(context.Background(), searchParams, options)
 	if err != nil {
 		log.Fatal(err)
 	}
