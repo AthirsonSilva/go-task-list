@@ -32,15 +32,15 @@ func FindUserById(id string) (models.User, error) {
 	return user, nil
 }
 
-func FindUserByUsername(username string) (models.User, error) {
+func FindUserByEmail(email string) (models.User, error) {
 	var user models.User
 
-	err := database.UserCollection.FindOne(context.Background(), bson.M{"email": username}).Decode(&user)
+	err := database.UserCollection.FindOne(context.Background(), bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		return user, err
 	}
 
-	err = database.UserCollection.FindOne(context.Background(), bson.M{"email": username}).Decode(&user)
+	err = database.UserCollection.FindOne(context.Background(), bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		return user, err
 	}

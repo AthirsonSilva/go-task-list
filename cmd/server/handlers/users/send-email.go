@@ -13,10 +13,12 @@ import (
 )
 
 var EmailChannel = make(chan dto.EmailData)
-var host = "smtp.gmail.com"
-var port = "587"
-var password = os.Getenv("SENDER_EMAIL_PASSWORD")
-var from = os.Getenv("SENDER_EMAIL_ADDRESS")
+var (
+	host     = os.Getenv("SMTP_HOST")
+	port     = os.Getenv("SMTP_PORT")
+	password = os.Getenv("SENDER_EMAIL_PASSWORD")
+	from     = os.Getenv("SENDER_EMAIL_ADDRESS")
+)
 
 func ListenForEmail() {
 	func() {

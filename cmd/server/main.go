@@ -9,6 +9,8 @@ import (
 	_ "github.com/AthirsonSilva/music-streaming-api/cmd/server/docs"
 	handlers "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/users"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/routes"
+	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 const PORT = ":8080"
@@ -24,6 +26,13 @@ const PORT = ":8080"
 func main() {
 	database.Database.Connect()
 	defer database.Database.Client.Disconnect(context.TODO())
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Printf("Error loading .env file => %s", err)
+	} else {
+		log.Println("Loaded .env file")
+	}
 
 	defer close(handlers.EmailChannel)
 	go handlers.ListenForEmail()

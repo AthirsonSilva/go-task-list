@@ -35,7 +35,7 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	foundUser, err := repositories.FindUserByUsername(creds.Username)
+	foundUser, err := repositories.FindUserByEmail(creds.Username)
 	if err != nil {
 		response = api.Response{
 			Message: "Invalid request",

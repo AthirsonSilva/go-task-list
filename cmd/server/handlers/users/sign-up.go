@@ -42,6 +42,16 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	foundUser, err := repositories.FindUserByEmail(request.Email)
+	if err == nil && foundUser.Email != "" {
+		response = api.Response{
+			Message: "User already exists",
+			Data:    request,
+		}
+		api.JSON(res, response, http.StatusConflict)
+		return
+	}
+
 	user := request.ToModel()
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
