@@ -1,9 +1,11 @@
-package users
+package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models/dto"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"golang.org/x/crypto/bcrypt"
@@ -61,6 +63,14 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		api.JSON(res, response, http.StatusInternalServerError)
 		return
 	}
+
+	log.Println("Sending email to address: ", user.Email)
+	var emailData = dto.EmailData{
+		To:      user.Email,
+		Subject: "Email verification",
+		Body:    "Please verify your email",
+	}
+	EmailChannel <- emailData
 
 	response = api.Response{
 		Message: "User created",

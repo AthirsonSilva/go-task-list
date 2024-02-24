@@ -19,6 +19,7 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Documentation with SwaggerUI         | 🟢 Ready     |
 | Pagination, sorting and searching    | 🟢 Ready     |
 | Mailing service                      | 🔴 Not Ready |
+| AI Recomendation service             | 🔴 Not Ready |
 | Layered architecture                 | 🟢 Ready     |
 | Error Handling                       | 🟢 Ready     |
 | API versioning                       | 🟢 Ready     |

@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
 	_ "github.com/AthirsonSilva/music-streaming-api/cmd/server/docs"
+	handlers "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/users"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/routes"
 )
 
@@ -21,6 +23,10 @@ const PORT = ":8080"
 // @BasePath /
 func main() {
 	database.Database.Connect()
+	defer database.Database.Client.Disconnect(context.TODO())
+
+	defer close(handlers.EmailChannel)
+	go handlers.ListenForEmail()
 
 	server := &http.Server{
 		Addr:    PORT,
