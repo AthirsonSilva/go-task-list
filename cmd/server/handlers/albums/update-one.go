@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -17,40 +18,29 @@ import (
 // @Param Authorization header string true "Authorization"
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
-// @Failure 404 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Router /api/v1/albums/{id} [put]
 func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusBadRequest)
+		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
 	id := api.PathVar(req, 1)
 	if id == "" {
-		response = api.Response{
-			Message: "ID is required",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusBadRequest)
+		api.Error(res, req, "ID is required", errors.New("ID is required"), http.StatusBadRequest)
 		return
 	}
 
 	album := request.ToModel()
 	album, err := repositories.UpdateAlbumById(id, album)
 	if err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusInternalServerError)
+		api.Error(res, req, "Error while updating album", err, http.StatusInternalServerError)
 		return
 	}
 

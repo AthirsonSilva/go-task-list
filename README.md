@@ -18,15 +18,16 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Data generation                      | 🟢 Ready     |
 | Documentation with SwaggerUI         | 🟢 Ready     |
 | Pagination, sorting and searching    | 🟢 Ready     |
-| Mailing service                      | 🔴 Not Ready |
+| Mailing service                      | 🟢 Ready     |
+| AI Recomendation service             | 🔴 Not Ready |
 | Layered architecture                 | 🟢 Ready     |
 | Error Handling                       | 🟢 Ready     |
 | API versioning                       | 🟢 Ready     |
 | Excel, CSV and PDF exporting         | 🔴 Not Ready |
 | File upload and download             | 🔴 Not Ready |
-| Rate Limiting                        | 🔴 Not Ready |
+| Rate Limiting                        | 🟢 Ready     |
 | Data Encryption                      | 🟢 Ready     |
-| Asynchronous/ brackground tasks      | 🔴 Not Ready |
+| Asynchronous/ brackground tasks      | 🟢 Ready     |
 | Logging                              | 🟢 Ready     |
 | CI/ CD with Docker and Railway       | 🟢 Ready     |
 

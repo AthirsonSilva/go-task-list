@@ -8,12 +8,28 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/time/rate"
 )
+
+func RateLimiter(next http.Handler) http.Handler {
+	limiter := rate.NewLimiter(3, 5) // max 5 requests per second and burst of 3
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		if !limiter.Allow() {
+			res.WriteHeader(http.StatusTooManyRequests)
+			res.Write([]byte("Too many requests"))
+			return
+		} else {
+			next.ServeHTTP(res, req)
+		}
+	})
+}
 
 func WriteToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		log.Printf("Request method => %s", req.Method)
 		log.Printf("Request protocol => %s", req.Proto)
+		log.Printf("Request URL => %s", req.URL)
+		log.Printf("Request HOST => %s", req.Host)
 
 		headers := []string{"Content-Type", "Accept", "User-Agent"}
 		for _, h := range headers {

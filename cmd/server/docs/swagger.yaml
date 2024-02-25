@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  api.Exception:
+    properties:
+      message:
+        type: string
+      path:
+        type: string
+      timestamp:
+        type: string
+    type: object
   api.Response:
     properties:
       data: {}
@@ -87,11 +96,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Find all albums
       tags:
       - albums
@@ -120,11 +133,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Creates an album
       tags:
       - albums
@@ -151,15 +168,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Deletes an album
       tags:
       - albums
@@ -185,15 +206,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
-        "404":
-          description: Not Found
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Find one album by ID
       tags:
       - albums
@@ -227,15 +248,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
-        "404":
-          description: Not Found
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Find all albums
       tags:
       - albums
@@ -257,15 +278,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
-        "404":
-          description: Not Found
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Find one user by ID
       tags:
       - users
@@ -290,11 +311,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: SignIn the user and returns a JWT token
       tags:
       - users
@@ -319,12 +344,45 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.Exception'
       summary: Creates an user
+      tags:
+      - users
+  /api/v1/users/verify:
+    get:
+      parameters:
+      - description: token
+        in: query
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Exception'
+      summary: Verifies an user
       tags:
       - users
 swagger: "2.0"

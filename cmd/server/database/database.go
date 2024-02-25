@@ -46,8 +46,8 @@ func (db *DatabaseInstance) Connect() {
 
 	Database = &DatabaseInstance{Client: client}
 
-	migrateData(AlbumCollection, "album")
-	migrateData(UserCollection, "user")
+	go migrateData(AlbumCollection, "album")
+	go migrateData(UserCollection, "user")
 }
 
 func migrateData(mongoCollection *mongo.Collection, collectionName string) {
@@ -84,7 +84,6 @@ func generateModel(entity string) any {
 		}
 	case "user":
 		password := gofakeit.Password(true, true, true, true, true, 8)
-		log.Println(password)
 
 		pass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
@@ -95,6 +94,7 @@ func generateModel(entity string) any {
 			Username:  gofakeit.Username(),
 			Email:     gofakeit.Email(),
 			Password:  string(pass),
+			Enabled:   true,
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		}

@@ -9,11 +9,18 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Response struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
+}
+
+type Exception struct {
+	Message   string    `json:"message"`
+	Timestamp time.Time `json:"timestamp"`
+	Path      string    `json:"path"`
 }
 
 type Pagination struct {
@@ -30,14 +37,18 @@ func JSON(w http.ResponseWriter, data Response, status int) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func Error(w http.ResponseWriter, err error, status int) {
+func Error(w http.ResponseWriter, r *http.Request, errorMessage string, originalError error, status int) {
+	log.Printf("Error while processing request: %s", originalError.Error())
+
+	apiError := Exception{
+		Message:   errorMessage,
+		Path:      r.URL.Path,
+		Timestamp: time.Now(),
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
-}
-
-func BadRequest(w http.ResponseWriter, err error) {
-	Error(w, err, http.StatusBadRequest)
+	json.NewEncoder(w).Encode(apiError)
 }
 
 func ReadBody(r *http.Request, v any) error {

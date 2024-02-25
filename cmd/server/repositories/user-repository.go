@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
@@ -32,15 +31,15 @@ func FindUserById(id string) (models.User, error) {
 	return user, nil
 }
 
-func FindUserByUsername(username string) (models.User, error) {
+func FindUserByEmail(email string) (models.User, error) {
 	var user models.User
 
-	err := database.UserCollection.FindOne(context.Background(), bson.M{"email": username}).Decode(&user)
+	err := database.UserCollection.FindOne(context.Background(), bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		return user, err
 	}
 
-	err = database.UserCollection.FindOne(context.Background(), bson.M{"email": username}).Decode(&user)
+	err = database.UserCollection.FindOne(context.Background(), bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		return user, err
 	}
@@ -55,7 +54,20 @@ func CreateUser(user models.User) (models.User, error) {
 
 	_, err := database.UserCollection.InsertOne(context.Background(), user)
 	if err != nil {
-		log.Fatal(err)
+		return user, err
+	}
+
+	return user, nil
+}
+
+func UpdateUserByID(user models.User) (models.User, error) {
+	user.UpdatedAt = time.Now()
+
+	_, err := database.UserCollection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": user.ID}, bson.M{"$set": user})
+	if err != nil {
+		return user, err
 	}
 
 	return user, nil

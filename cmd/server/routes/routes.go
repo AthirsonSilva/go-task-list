@@ -17,6 +17,7 @@ func Routes() http.Handler {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 	router.Use(middlewares.WriteToConsole)
+	router.Use(middlewares.RateLimiter)
 
 	router.Get("/", func(res http.ResponseWriter, req *http.Request) {
 		http.Redirect(res, req, "/swagger/index.html", http.StatusFound)
@@ -45,4 +46,5 @@ func UserRoutes(router chi.Router) {
 	router.Get("/{id}", users.FindOneUserById)
 	router.Post("/signup", users.SignUp)
 	router.Post("/signin", users.SignIn)
+	router.Get("/verify", users.VerifyUser)
 }

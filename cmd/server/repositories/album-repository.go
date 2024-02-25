@@ -103,7 +103,7 @@ func UpdateAlbumById(id string, album models.Album) (models.Album, error) {
 		bson.D{{Key: "$set", Value: album}},
 	)
 	if err != nil {
-		log.Fatal(err)
+		return album, err
 	}
 
 	return album, nil
@@ -112,7 +112,7 @@ func UpdateAlbumById(id string, album models.Album) (models.Album, error) {
 func DeleteAlbumById(id string) error {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	err = database.AlbumCollection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
@@ -122,7 +122,7 @@ func DeleteAlbumById(id string) error {
 
 	_, err = database.AlbumCollection.DeleteOne(context.Background(), bson.M{"_id": oid})
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return nil

@@ -14,8 +14,9 @@ import (
 // @Produce  application/json
 // @Param album body models.AlbumRequest true "Album request"
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param Authorization header string true "Authorization"
 // @Router /api/v1/albums [post]
 func CreateAlbum(res http.ResponseWriter, req *http.Request) {
@@ -23,22 +24,14 @@ func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusBadRequest)
+		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
 	album := request.ToModel()
 	album, err := repositories.CreateAlbum(album)
 	if err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusInternalServerError)
+		api.Error(res, req, "Error while creating album", err, http.StatusInternalServerError)
 		return
 	}
 

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -12,8 +13,9 @@ import (
 // @Tags albums
 // @Produce  json
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param Authorization header string true "Authorization"
 // @Param page query int false "page" default(1)
 // @Param size query int false "size" default(10)
@@ -26,17 +28,13 @@ func FindAllAlbums(res http.ResponseWriter, req *http.Request) {
 
 	paginationInfo, errorData := api.GetPaginationInfo(req)
 	if errorData.Message != "" {
-		api.JSON(res, errorData, http.StatusBadRequest)
+		api.Error(res, req, errorData.Message, errors.New(errorData.Message), http.StatusBadRequest)
 		return
 	}
 
 	albums, err := repositories.FindAllAlbums(paginationInfo)
 	if err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusInternalServerError)
+		api.Error(res, req, "Error while finding albums", err, http.StatusInternalServerError)
 		return
 	}
 

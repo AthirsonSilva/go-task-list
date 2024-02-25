@@ -1,4 +1,4 @@
-package users
+package handlers
 
 import (
 	"encoding/json"
@@ -18,8 +18,9 @@ import (
 // @Produce  application/json
 // @Param user body authentication.Credentials true "SignUp request"
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Router /api/v1/users/signin [post]
 func SignIn(res http.ResponseWriter, req *http.Request) {
 	var creds authentication.Credentials
@@ -27,31 +28,22 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	err := json.NewDecoder(req.Body).Decode(&creds)
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
-	foundUser, err := repositories.FindUserByUsername(creds.Username)
+	foundUser, err := repositories.FindUserByEmail(creds.Username)
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Invalid email or password provided", err, http.StatusBadRequest)
+		return
+	} else if !foundUser.Enabled {
+		api.Error(res, req, "You must verify your account first", err, http.StatusUnauthorized)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(creds.Password))
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Wrong password provided", err, http.StatusBadRequest)
 		return
 	}
 
@@ -68,11 +60,7 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	tokenString, err := token.SignedString(authentication.JwtKey)
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Invalid request", err, http.StatusBadRequest)
 		return
 	}
 

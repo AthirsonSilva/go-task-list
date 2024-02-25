@@ -1,6 +1,7 @@
-package users
+package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
@@ -12,8 +13,9 @@ import (
 // @Produce  json
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
-// @Failure 404 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param id path string true "User ID"
 // @Router /api/v1/users/{id} [get]
 func FindOneUserById(res http.ResponseWriter, req *http.Request) {
@@ -21,21 +23,13 @@ func FindOneUserById(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	if id == "" {
-		response = api.Response{
-			Message: "ID is required",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusBadRequest)
+		api.Error(res, req, "ID is required", errors.New("ID is required"), http.StatusBadRequest)
 		return
 	}
 
 	user, err := repositories.FindUserById(id)
 	if err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusInternalServerError)
+		api.Error(res, req, "Error while finding user", err, http.StatusInternalServerError)
 		return
 	}
 
