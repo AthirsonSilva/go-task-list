@@ -14,6 +14,8 @@ func WriteToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		log.Printf("Request method => %s", req.Method)
 		log.Printf("Request protocol => %s", req.Proto)
+		log.Printf("Request URL => %s", req.URL)
+		log.Printf("Request HOST => %s", req.Host)
 
 		headers := []string{"Content-Type", "Accept", "User-Agent"}
 		for _, h := range headers {

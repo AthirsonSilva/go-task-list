@@ -13,7 +13,9 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
-const PORT = ":8080"
+const (
+	PORT = ":8080"
+)
 
 // @title Music Streaming Swagger API
 // @version 1.0

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models/dto"
@@ -75,15 +76,23 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	log.Println("Sending email to address: ", user.Email)
+	var prefix string
+	if os.Getenv("ENV") == "production" {
+		prefix = "https"
+	} else {
+		prefix = "http"
+	}
+
+	verificationLink := fmt.Sprintf("%s://%s/api/v1/users/verify?token=%s", prefix, req.Host, user.ID.Hex())
+	log.Printf("Sending email to address: %s and verification link: %s", user.Email, verificationLink)
 	body := fmt.Sprintf(`
 		<h1>Email verification</h1>
 		<p>Hello %s, please verify your email by clicking on the link below</p>
 		<br>
-		<a href="http://localhost:8080/api/v1/users/verify?token=%s">Click here</a>
+		<a href="%s">Click here</a>
 		<br>
 		<p>Thanks!</p>
-	`, user.Username, user.ID.Hex())
+	`, user.Username, verificationLink)
 	var emailData = dto.EmailData{
 		To:      user.Email,
 		Subject: "Email verification",
