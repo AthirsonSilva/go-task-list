@@ -83,7 +83,7 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		<a href="http://localhost:8080/api/v1/users/verify?token=%s">Click here</a>
 		<br>
 		<p>Thanks!</p>
-	`, user.Username, user.ID.String())
+	`, user.Username, user.ID.Hex())
 	var emailData = dto.EmailData{
 		To:      user.Email,
 		Subject: "Email verification",

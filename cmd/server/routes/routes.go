@@ -45,4 +45,5 @@ func UserRoutes(router chi.Router) {
 	router.Get("/{id}", users.FindOneUserById)
 	router.Post("/signup", users.SignUp)
 	router.Post("/signin", users.SignIn)
+	router.Get("/verify", users.VerifyUser)
 }

@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
@@ -55,7 +54,20 @@ func CreateUser(user models.User) (models.User, error) {
 
 	_, err := database.UserCollection.InsertOne(context.Background(), user)
 	if err != nil {
-		log.Fatal(err)
+		return user, err
+	}
+
+	return user, nil
+}
+
+func UpdateUserByID(user models.User) (models.User, error) {
+	user.UpdatedAt = time.Now()
+
+	_, err := database.UserCollection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": user.ID}, bson.M{"$set": user})
+	if err != nil {
+		return user, err
 	}
 
 	return user, nil

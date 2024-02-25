@@ -94,6 +94,7 @@ func generateModel(entity string) any {
 			Username:  gofakeit.Username(),
 			Email:     gofakeit.Email(),
 			Password:  string(pass),
+			Enabled:   true,
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		}

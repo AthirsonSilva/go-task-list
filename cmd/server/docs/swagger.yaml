@@ -327,4 +327,33 @@ paths:
       summary: Creates an user
       tags:
       - users
+  /api/v1/users/verify:
+    get:
+      parameters:
+      - description: token
+        in: query
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Verifies an user
+      tags:
+      - users
 swagger: "2.0"
