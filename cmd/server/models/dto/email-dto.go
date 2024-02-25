@@ -5,3 +5,5 @@ type EmailData struct {
 	Subject string
 	Body    string
 }
+
+	

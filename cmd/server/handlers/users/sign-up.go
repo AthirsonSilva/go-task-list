@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -45,10 +46,10 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	foundUser, err := repositories.FindUserByEmail(request.Email)
 	if err == nil && foundUser.Email != "" {
 		response = api.Response{
-			Message: "User already exists",
+			Message: "Given email is already in use",
 			Data:    request,
 		}
-		api.JSON(res, response, http.StatusConflict)
+		api.JSON(res, response, http.StatusBadRequest)
 		return
 	}
 
@@ -75,15 +76,23 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	}
 
 	log.Println("Sending email to address: ", user.Email)
+	body := fmt.Sprintf(`
+		<h1>Email verification</h1>
+		<p>Hello %s, please verify your email by clicking on the link below</p>
+		<br>
+		<a href="http://localhost:8080/api/v1/users/verify?token=%s">Click here</a>
+		<br>
+		<p>Thanks!</p>
+	`, user.Username, user.ID.String())
 	var emailData = dto.EmailData{
 		To:      user.Email,
 		Subject: "Email verification",
-		Body:    "Please verify your email",
+		Body:    body,
 	}
 	EmailChannel <- emailData
 
 	response = api.Response{
-		Message: "User created",
+		Message: "User registered successfully! Check your email to verify your account",
 		Data:    user,
 	}
 	api.JSON(res, response, http.StatusCreated)

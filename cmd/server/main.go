@@ -27,7 +27,7 @@ func main() {
 	database.Database.Connect()
 	defer database.Database.Client.Disconnect(context.TODO())
 
-	err := godotenv.Load()
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Printf("Error loading .env file => %s", err)
 	} else {

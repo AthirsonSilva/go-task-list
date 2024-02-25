@@ -66,7 +66,7 @@ func SendSimpleEmailMessage(emailData dto.EmailData) {
 	email.SetFrom(from)
 	email.AddTo(emailData.To)
 	email.SetSubject(emailData.Subject)
-	email.SetBody(mail.TextPlain, emailData.Body)
+	email.SetBody(mail.TextHTML, emailData.Body)
 
 	err = email.Send(client)
 	if err != nil {
