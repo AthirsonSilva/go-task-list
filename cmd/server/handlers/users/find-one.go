@@ -13,8 +13,9 @@ import (
 // @Produce  json
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
-// @Failure 404 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param id path string true "User ID"
 // @Router /api/v1/users/{id} [get]
 func FindOneUserById(res http.ResponseWriter, req *http.Request) {

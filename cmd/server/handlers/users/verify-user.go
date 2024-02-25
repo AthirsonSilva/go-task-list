@@ -12,9 +12,9 @@ import (
 // @Tags users
 // @Produce  json
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
-// @Failure 404 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param token query string false "token"
 // @Router /api/v1/users/verify [get]
 func VerifyUser(res http.ResponseWriter, req *http.Request) {

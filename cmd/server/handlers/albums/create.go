@@ -14,8 +14,9 @@ import (
 // @Produce  application/json
 // @Param album body models.AlbumRequest true "Album request"
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param Authorization header string true "Authorization"
 // @Router /api/v1/albums [post]
 func CreateAlbum(res http.ResponseWriter, req *http.Request) {

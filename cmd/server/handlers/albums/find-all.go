@@ -13,8 +13,9 @@ import (
 // @Tags albums
 // @Produce  json
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Param Authorization header string true "Authorization"
 // @Param page query int false "page" default(1)
 // @Param size query int false "size" default(10)

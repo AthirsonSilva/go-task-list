@@ -18,8 +18,9 @@ import (
 // @Param Authorization header string true "Authorization"
 // @Success 200 {object} api.Response
 // @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
-// @Failure 404 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Router /api/v1/albums/{id} [put]
 func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest

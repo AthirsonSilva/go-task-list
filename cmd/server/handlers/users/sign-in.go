@@ -18,8 +18,9 @@ import (
 // @Produce  application/json
 // @Param user body authentication.Credentials true "SignUp request"
 // @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 400 {object} api.Response
+// @Failure 500 {object} api.Exception
+// @Failure 400 {object} api.Exception
+// @Failure 429 {object} api.Exception
 // @Router /api/v1/users/signin [post]
 func SignIn(res http.ResponseWriter, req *http.Request) {
 	var creds authentication.Credentials
