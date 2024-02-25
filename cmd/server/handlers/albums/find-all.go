@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -26,17 +27,13 @@ func FindAllAlbums(res http.ResponseWriter, req *http.Request) {
 
 	paginationInfo, errorData := api.GetPaginationInfo(req)
 	if errorData.Message != "" {
-		api.JSON(res, errorData, http.StatusBadRequest)
+		api.Error(res, req, errorData.Message, errors.New(errorData.Message), http.StatusBadRequest)
 		return
 	}
 
 	albums, err := repositories.FindAllAlbums(paginationInfo)
 	if err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusInternalServerError)
+		api.Error(res, req, "Error while finding albums", err, http.StatusInternalServerError)
 		return
 	}
 

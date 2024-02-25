@@ -27,38 +27,22 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	err := json.NewDecoder(req.Body).Decode(&creds)
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
 	foundUser, err := repositories.FindUserByEmail(creds.Username)
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid data provided",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Invalid email or password provided", err, http.StatusBadRequest)
 		return
 	} else if !foundUser.Enabled {
-		response = api.Response{
-			Message: "You must verify your account first",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "You must verify your account first", err, http.StatusUnauthorized)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(creds.Password))
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Wrong password provided", err, http.StatusBadRequest)
 		return
 	}
 
@@ -75,11 +59,7 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	tokenString, err := token.SignedString(authentication.JwtKey)
 	if err != nil {
-		response = api.Response{
-			Message: "Invalid request",
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusUnauthorized)
+		api.Error(res, req, "Invalid request", err, http.StatusBadRequest)
 		return
 	}
 

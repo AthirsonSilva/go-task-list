@@ -23,22 +23,14 @@ func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusBadRequest)
+		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
 	album := request.ToModel()
 	album, err := repositories.CreateAlbum(album)
 	if err != nil {
-		response = api.Response{
-			Message: err.Error(),
-			Data:    nil,
-		}
-		api.JSON(res, response, http.StatusInternalServerError)
+		api.Error(res, req, "Error while creating album", err, http.StatusInternalServerError)
 		return
 	}
 
