@@ -10,6 +10,13 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+func RateLimiter(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		time.Sleep(100 * time.Millisecond)
+		next.ServeHTTP(res, req)
+	})
+}
+
 func WriteToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		log.Printf("Request method => %s", req.Method)
