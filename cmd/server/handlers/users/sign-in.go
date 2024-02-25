@@ -38,7 +38,14 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 	foundUser, err := repositories.FindUserByEmail(creds.Username)
 	if err != nil {
 		response = api.Response{
-			Message: "Invalid request",
+			Message: "Invalid data provided",
+			Data:    nil,
+		}
+		api.JSON(res, response, http.StatusUnauthorized)
+		return
+	} else if !foundUser.Enabled {
+		response = api.Response{
+			Message: "You must verify your account first",
 			Data:    nil,
 		}
 		api.JSON(res, response, http.StatusUnauthorized)
