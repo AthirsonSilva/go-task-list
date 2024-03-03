@@ -5,14 +5,12 @@ import (
 	"fmt"
 	awsservice "github.com/AthirsonSilva/music-streaming-api/cmd/server/aws"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models/dto"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // SignUp @Summary Creates a user
@@ -49,6 +47,7 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 
 	foundUser, err := repositories.FindUserByEmail(request.Email)
 	if err == nil && foundUser.Email != "" {
+		err = errors.New("email already in use")
 		api.Error(res, req, "Given email is already in use", err, http.StatusBadRequest)
 		return
 	}
@@ -73,12 +72,22 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	go func() {
-		err := awsservice.PutBucketObject(fileName, photoUrl)
+	if photoUrl != "" {
+		filePath := "/tmp/" + fileName
+		key := "users/" + user.ID.Hex() + "-" + user.Username
+
+		s3FilePath, err := awsservice.PutBucketObject(key, filePath)
 		if err != nil {
-			log.Printf("Error while uploading photo to S3 => %s", err)
+			log.Printf("Error while uploading photo: %s", err)
 		}
-	}()
+
+		user.PhotoUrl = s3FilePath
+		_, err = repositories.UpdateUserByID(user)
+		if err != nil {
+			api.Error(res, req, "Error while updating user", err, http.StatusInternalServerError)
+			return
+		}
+	}
 
 	var prefix string
 	if os.Getenv("ENV") == "production" {
@@ -97,7 +106,7 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		<br>
 		<p>Thanks!</p>
 	`, user.Username, verificationLink)
-	var emailData = dto.EmailData{
+	var emailData = models.EmailDto{
 		To:      user.Email,
 		Subject: "Email verification",
 		Body:    body,

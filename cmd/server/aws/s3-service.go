@@ -3,6 +3,7 @@ package awsservice
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -23,18 +24,18 @@ func getClient() *s3.Client {
 	return c
 }
 
-func PutBucketObject(key string, fileName string) (err error) {
-	file, err := os.Open(fileName)
+func PutBucketObject(key string, filePath string) (s3FilePath string, err error) {
+	file, err := os.Open(filePath)
 	if err != nil {
 		log.Printf("Error opening file: %s", err)
-		return err
+		return "", err
 	}
 	defer file.Close()
 
 	fileInfo, err := file.Stat()
 	if err != nil {
 		log.Printf("Error getting file info: %s", err)
-		return err
+		return "", err
 	}
 	size := fileInfo.Size()
 
@@ -42,7 +43,7 @@ func PutBucketObject(key string, fileName string) (err error) {
 	_, err = file.Read(buffer)
 	if err != nil {
 		log.Printf("Error reading file: %s", err)
-		return err
+		return "", err
 	}
 
 	putObject := &s3.PutObjectInput{
@@ -58,9 +59,11 @@ func PutBucketObject(key string, fileName string) (err error) {
 	output, err := getClient().PutObject(context.TODO(), putObject)
 	if err != nil {
 		log.Fatal(err)
-		return err
+		return "", err
 	}
 
 	log.Println("Successfully uploaded to S3", output)
-	return nil
+
+	photoUrl := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", bucketName, key)
+	return photoUrl, nil
 }
