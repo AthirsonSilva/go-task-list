@@ -21,7 +21,6 @@
                 "tags": [
                     "albums"
                 ],
-                "summary": "Find all albums",
                 "parameters": [
                     {
                         "type": "string",
@@ -102,22 +101,31 @@
                 "tags": [
                     "albums"
                 ],
-                "summary": "Creates an album",
                 "parameters": [
-                    {
-                        "description": "Album request",
-                        "name": "album",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.AlbumRequest"
-                        }
-                    },
                     {
                         "type": "string",
                         "description": "Authorization",
                         "name": "Authorization",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "artist",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "File",
+                        "name": "file",
+                        "in": "formData",
                         "required": true
                     }
                 ],
@@ -157,7 +165,6 @@
                 "tags": [
                     "albums"
                 ],
-                "summary": "Find one album by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -211,7 +218,6 @@
                 "tags": [
                     "albums"
                 ],
-                "summary": "Find all albums",
                 "parameters": [
                     {
                         "description": "Album request",
@@ -271,7 +277,6 @@
                 "tags": [
                     "albums"
                 ],
-                "summary": "Deletes an album",
                 "parameters": [
                     {
                         "type": "string",
@@ -333,7 +338,6 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "SignIn the user and returns a JWT token",
                 "parameters": [
                     {
                         "description": "SignUp request",
@@ -384,7 +388,6 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "Creates an user",
                 "parameters": [
                     {
                         "description": "User request",
@@ -432,7 +435,6 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "Verifies an user",
                 "parameters": [
                     {
                         "type": "string",
@@ -477,7 +479,6 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "Find one user by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -555,15 +556,11 @@
             "type": "object",
             "required": [
                 "artist",
-                "price",
                 "title"
             ],
             "properties": {
                 "artist": {
                     "type": "string"
-                },
-                "price": {
-                    "type": "number"
                 },
                 "title": {
                     "type": "string"

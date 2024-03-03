@@ -9,15 +9,16 @@ import (
 )
 
 // FindOneUserById @Summary Find one user by ID
-// @Tags users
-// @Produce  json
-// @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 500 {object} internal.Exception
-// @Failure 400 {object} internal.Exception
-// @Failure 429 {object} internal.Exception
-// @Param id path string true "User ID"
-// @Router /api/v1/users/{id} [get]
+//
+//	@Tags		users
+//	@Produce	json
+//	@Success	200	{object}	api.Response
+//	@Failure	500	{object}	api.Response
+//	@Failure	500	{object}	api.Exception
+//	@Failure	400	{object}	api.Exception
+//	@Failure	429	{object}	api.Exception
+//	@Param		id	path		string	true	"User ID"
+//	@Router		/api/v1/users/{id} [get]
 func FindOneUserById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)
 	var response api.Response

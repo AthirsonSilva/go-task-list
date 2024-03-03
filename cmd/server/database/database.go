@@ -88,7 +88,6 @@ func generateModel(entity string) any {
 		return models.Album{
 			Artist:    gofakeit.Name(),
 			Title:     gofakeit.Sentence(3),
-			Price:     gofakeit.Price(0, 100),
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		}

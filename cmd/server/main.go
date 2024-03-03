@@ -17,14 +17,14 @@ const (
 	PORT = ":8080"
 )
 
-// @title Music Streaming Swagger API
-// @version 1.0
-// @author Athirson Silva
-// @description Swagger API for Golang Project Music Streaming API
-// @termsOfService http://swagger.io/terms/
-// @license.name MIT
-// @license.url https://github.com/AthrsonsSilva/music-streaming-api
-// @BasePath /
+// @title			Music Streaming Swagger API
+// @version		1.0
+// @author			Athirson Silva
+// @description	Swagger API for Golang Project Music Streaming API
+// @termsOfService	http://swagger.io/terms/
+// @license.name	MIT
+// @license.url	https://github.com/AthrsonsSilva/music-streaming-api
+// @BasePath		/
 func main() {
 	database.Database.Connect()
 	defer database.Database.Client.Disconnect(context.TODO())

@@ -10,18 +10,19 @@ import (
 )
 
 // UpdateAlbumById @Summary Find all albums
-// @Tags albums
-// @Accept  application/json
-// @Produce  application/json
-// @Param album body models.AlbumRequest true "Album request"
-// @Param id path string true "Album ID"
-// @Param Authorization header string true "Authorization"
-// @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 500 {object} internal.Exception
-// @Failure 400 {object} internal.Exception
-// @Failure 429 {object} internal.Exception
-// @Router /api/v1/albums/{id} [put]
+//
+//	@Tags		albums
+//	@Accept		application/json
+//	@Produce	application/json
+//	@Param		album			body		models.AlbumRequest	true	"Album request"
+//	@Param		id				path		string				true	"Album ID"
+//	@Param		Authorization	header		string				true	"Authorization"
+//	@Success	200				{object}	api.Response
+//	@Failure	500				{object}	api.Response
+//	@Failure	500				{object}	api.Exception
+//	@Failure	400				{object}	api.Exception
+//	@Failure	429				{object}	api.Exception
+//	@Router		/api/v1/albums/{id} [put]
 func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest
 	var response api.Response

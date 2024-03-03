@@ -28,7 +28,6 @@ const docTemplate = `{
                 "tags": [
                     "albums"
                 ],
-                "summary": "Find all albums",
                 "parameters": [
                     {
                         "type": "string",
@@ -109,22 +108,31 @@ const docTemplate = `{
                 "tags": [
                     "albums"
                 ],
-                "summary": "Creates an album",
                 "parameters": [
-                    {
-                        "description": "Album request",
-                        "name": "album",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.AlbumRequest"
-                        }
-                    },
                     {
                         "type": "string",
                         "description": "Authorization",
                         "name": "Authorization",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "artist",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "File",
+                        "name": "file",
+                        "in": "formData",
                         "required": true
                     }
                 ],
@@ -164,7 +172,6 @@ const docTemplate = `{
                 "tags": [
                     "albums"
                 ],
-                "summary": "Find one album by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -218,7 +225,6 @@ const docTemplate = `{
                 "tags": [
                     "albums"
                 ],
-                "summary": "Find all albums",
                 "parameters": [
                     {
                         "description": "Album request",
@@ -278,7 +284,6 @@ const docTemplate = `{
                 "tags": [
                     "albums"
                 ],
-                "summary": "Deletes an album",
                 "parameters": [
                     {
                         "type": "string",
@@ -340,7 +345,6 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "SignIn the user and returns a JWT token",
                 "parameters": [
                     {
                         "description": "SignUp request",
@@ -391,7 +395,6 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Creates an user",
                 "parameters": [
                     {
                         "description": "User request",
@@ -439,7 +442,6 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Verifies an user",
                 "parameters": [
                     {
                         "type": "string",
@@ -484,7 +486,6 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Find one user by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -562,15 +563,11 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "artist",
-                "price",
                 "title"
             ],
             "properties": {
                 "artist": {
                     "type": "string"
-                },
-                "price": {
-                    "type": "number"
                 },
                 "title": {
                     "type": "string"

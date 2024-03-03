@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -34,7 +36,10 @@ type Pagination struct {
 func JSON(w http.ResponseWriter, data Response, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		Error(w, nil, err.Error(), err, http.StatusInternalServerError)
+	}
 }
 
 func Error(w http.ResponseWriter, r *http.Request, errorMessage string, originalError error, status int) {
@@ -48,11 +53,15 @@ func Error(w http.ResponseWriter, r *http.Request, errorMessage string, original
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(apiError)
+	err := json.NewEncoder(w).Encode(apiError)
+	if err != nil {
+		Error(w, nil, err.Error(), err, http.StatusInternalServerError)
+	}
 }
 
 func ReadBody(r *http.Request, v any) error {
 	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
 	return decoder.Decode(&v)
 }
 
@@ -159,4 +168,31 @@ func GetPaginationInfo(req *http.Request) (Pagination, Response) {
 		SearchName:    searchName,
 	}
 	return pagination, Response{}
+}
+
+func FileUpload(r *http.Request) (string, error) {
+	err := r.ParseMultipartForm(32 << 20) // 32MB max
+	if err != nil {
+		return "", err
+	}
+
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	// This is path which we want to store the file
+	f, err := os.OpenFile("/tmp/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	_, err = io.Copy(f, file)
+	if err != nil {
+		return "", err
+	}
+
+	return handler.Filename, nil
 }

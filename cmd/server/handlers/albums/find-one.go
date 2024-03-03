@@ -9,16 +9,17 @@ import (
 )
 
 // FindOneAlbumById @Summary Find one album by ID
-// @Tags albums
-// @Produce json
-// @Success 200 {object} api.Response
-// @Failure 500 {object} api.Response
-// @Failure 500 {object} internal.Exception
-// @Failure 400 {object} internal.Exception
-// @Failure 429 {object} internal.Exception
-// @Param id path string true "Album ID"
-// @Param Authorization header string true "Authorization"
-// @Router /api/v1/albums/{id} [get]
+//
+//	@Tags		albums
+//	@Produce	json
+//	@Success	200				{object}	api.Response
+//	@Failure	500				{object}	api.Response
+//	@Failure	500				{object}	api.Exception
+//	@Failure	400				{object}	api.Exception
+//	@Failure	429				{object}	api.Exception
+//	@Param		id				path		string	true	"Album ID"
+//	@Param		Authorization	header		string	true	"Authorization"
+//	@Router		/api/v1/albums/{id} [get]
 func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)
 	var response api.Response

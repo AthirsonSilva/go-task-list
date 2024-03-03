@@ -26,13 +26,10 @@ definitions:
     properties:
       artist:
         type: string
-      price:
-        type: number
       title:
         type: string
     required:
     - artist
-    - price
     - title
     type: object
   models.UserRequest:
@@ -105,24 +102,30 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Find all albums
       tags:
       - albums
     post:
       consumes:
       - application/json
       parameters:
-      - description: Album request
-        in: body
-        name: album
-        required: true
-        schema:
-          $ref: '#/definitions/models.AlbumRequest'
       - description: Authorization
         in: header
         name: Authorization
         required: true
         type: string
+      - in: formData
+        name: artist
+        required: true
+        type: string
+      - in: formData
+        name: title
+        required: true
+        type: string
+      - description: File
+        in: formData
+        name: file
+        required: true
+        type: file
       produces:
       - application/json
       responses:
@@ -142,7 +145,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Creates an album
       tags:
       - albums
   /api/v1/albums/{id}:
@@ -181,7 +183,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Deletes an album
       tags:
       - albums
     get:
@@ -215,7 +216,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Find one album by ID
       tags:
       - albums
     put:
@@ -257,7 +257,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Find all albums
       tags:
       - albums
   /api/v1/users/{id}:
@@ -287,7 +286,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Find one user by ID
       tags:
       - users
   /api/v1/users/signin:
@@ -320,7 +318,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: SignIn the user and returns a JWT token
       tags:
       - users
   /api/v1/users/signup:
@@ -353,7 +350,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Creates an user
       tags:
       - users
   /api/v1/users/verify:
@@ -382,7 +378,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Exception'
-      summary: Verifies an user
       tags:
       - users
 swagger: "2.0"

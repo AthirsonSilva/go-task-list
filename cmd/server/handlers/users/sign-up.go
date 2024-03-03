@@ -14,15 +14,16 @@ import (
 )
 
 // SignUp @Summary Creates an user
-// @Tags users
-// @Accept  application/json
-// @Produce  application/json
-// @Param user body models.UserRequest true "User request"
-// @Success 200 {object} api.Response
-// @Failure 500 {object} internal.Exception
-// @Failure 400 {object} internal.Exception
-// @Failure 429 {object} internal.Exception
-// @Router /api/v1/users/signup [post]
+//
+//	@Tags		users
+//	@Accept		application/json
+//	@Produce	application/json
+//	@Param		user	body		models.UserRequest	true	"User request"
+//	@Success	200		{object}	api.Response
+//	@Failure	500		{object}	api.Exception
+//	@Failure	400		{object}	api.Exception
+//	@Failure	429		{object}	api.Exception
+//	@Router		/api/v1/users/signup [post]
 func SignUp(res http.ResponseWriter, req *http.Request) {
 	var request models.UserRequest
 	var response api.Response
