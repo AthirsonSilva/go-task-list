@@ -8,19 +8,19 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 )
 
-// FindOneAlbumById @Summary Find one album by ID
+// DeleteTaskById @Summary Deletes a task
 //
-//	@Tags		albums
+//	@Tags		tasks
 //	@Produce	json
 //	@Success	200				{object}	api.Response
-//	@Failure	500				{object}	api.Response
 //	@Failure	500				{object}	api.Exception
 //	@Failure	400				{object}	api.Exception
 //	@Failure	429				{object}	api.Exception
-//	@Param		id				path		string	true	"Album ID"
+//	@Failure	404				{object}	api.Exception
+//	@Param		id				path		string	true	"Task ID"
 //	@Param		Authorization	header		string	true	"Authorization"
-//	@Router		/api/v1/albums/{id} [get]
-func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
+//	@Router		/api/v1/tasks/{id} [delete]
+func DeleteTaskById(res http.ResponseWriter, req *http.Request) {
 	id := api.PathVar(req, 1)
 	var response api.Response
 
@@ -29,16 +29,15 @@ func FindOneAlbumById(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	album, err := repositories.FindAlbumById(id)
+	err := repositories.DeleteTaskById(id)
 	if err != nil {
-		api.Error(res, req, "Error while finding album", err, http.StatusInternalServerError)
+		api.Error(res, req, "Error while deleting task", err, http.StatusInternalServerError)
 		return
 	}
 
-	albumResponse := album.ToResponse()
 	response = api.Response{
-		Message: "Album found",
-		Data:    albumResponse,
+		Message: "Task deleted",
+		Data:    "Provided ID: " + id,
 	}
 	api.JSON(res, response, http.StatusOK)
 }

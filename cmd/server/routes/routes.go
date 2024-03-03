@@ -5,7 +5,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"net/http"
 
-	albums "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/albums"
+	task "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/tasks"
 	users "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/users"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/middlewares"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
@@ -27,19 +27,19 @@ func Routes() http.Handler {
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))
 
-	router.Route("/api/v1/albums", AlbumRoutes)
+	router.Route("/api/v1/task", TaskRoutes)
 	router.Route("/api/v1/users", UserRoutes)
 
 	return router
 }
 
-func AlbumRoutes(router chi.Router) {
+func TaskRoutes(router chi.Router) {
 	router.Use(middlewares.VerifyAuthentication)
-	router.Get("/", albums.FindAllAlbums)
-	router.Get("/{id}", albums.FindOneAlbumById)
-	router.Post("/", albums.CreateAlbum)
-	router.Put("/{id}", albums.UpdateAlbumById)
-	router.Delete("/{id}", albums.DeleteAlbumById)
+	router.Get("/", task.FindAllTasks)
+	router.Get("/{id}", task.FindOneTaskById)
+	router.Post("/", task.CreateTask)
+	router.Put("/{id}", task.UpdateTaskById)
+	router.Delete("/{id}", task.DeleteTaskById)
 }
 
 func UserRoutes(router chi.Router) {

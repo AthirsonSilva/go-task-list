@@ -17,7 +17,7 @@ const (
 	PORT = ":8080"
 )
 
-// @title			Music Streaming Swagger API
+// @title			Task list Swagger API
 // @version		1.0
 // @author			Athirson Silva
 // @description	Swagger API for Golang Project Music Streaming API

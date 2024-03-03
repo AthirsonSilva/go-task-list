@@ -9,22 +9,22 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 )
 
-// UpdateAlbumById @Summary Find all albums
+// UpdateTaskById @Summary Find all tasks
 //
-//	@Tags		albums
+//	@Tags		tasks
 //	@Accept		application/json
 //	@Produce	application/json
-//	@Param		album			body		models.AlbumRequest	true	"Album request"
-//	@Param		id				path		string				true	"Album ID"
+//	@Param		task			body		models.TaskRequest	true	"Task request"
+//	@Param		id				path		string				true	"Task ID"
 //	@Param		Authorization	header		string				true	"Authorization"
 //	@Success	200				{object}	api.Response
 //	@Failure	500				{object}	api.Response
 //	@Failure	500				{object}	api.Exception
 //	@Failure	400				{object}	api.Exception
 //	@Failure	429				{object}	api.Exception
-//	@Router		/api/v1/albums/{id} [put]
-func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
-	var request models.AlbumRequest
+//	@Router		/api/v1/tasks/{id} [put]
+func UpdateTaskById(res http.ResponseWriter, req *http.Request) {
+	var request models.TaskRequest
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
@@ -38,16 +38,16 @@ func UpdateAlbumById(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	album := request.ToModel()
-	album, err := repositories.UpdateAlbumById(id, album)
+	task := request.ToModel()
+	task, err := repositories.UpdateTaskById(id, task)
 	if err != nil {
-		api.Error(res, req, "Error while updating album", err, http.StatusInternalServerError)
+		api.Error(res, req, "Error while updating task", err, http.StatusInternalServerError)
 		return
 	}
 
 	response = api.Response{
-		Message: "Album updated",
-		Data:    album,
+		Message: "Task updated",
+		Data:    task,
 	}
 	api.JSON(res, response, http.StatusOK)
 }

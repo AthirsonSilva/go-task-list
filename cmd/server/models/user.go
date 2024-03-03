@@ -14,6 +14,7 @@ type User struct {
 	Email     string             `json:"email"`
 	Password  string             `json:"password"`
 	Enabled   bool               `json:"enabled"`
+	PhotoUrl  string             `json:"photo_url"                       binding:"required"`
 	CreatedAt time.Time          `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at"`
 }

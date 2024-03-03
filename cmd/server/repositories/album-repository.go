@@ -23,8 +23,8 @@ func setFindOptions(options *options.FindOptions, pagination api.Pagination) {
 	options.SetSort(bson.D{{Key: pagination.SortField, Value: pagination.SortDirection}})
 }
 
-func FindAllAlbums(pagination api.Pagination) ([]models.Album, error) {
-	var albums []models.Album
+func FindAllTasks(pagination api.Pagination) ([]models.Task, error) {
+	var tasks []models.Task
 	var findOptions = options.Find()
 	setFindOptions(findOptions, pagination)
 
@@ -33,97 +33,97 @@ func FindAllAlbums(pagination api.Pagination) ([]models.Album, error) {
 		searchParams["title"] = bson.M{"$regex": pagination.SearchName, "$findOptions": "i"}
 	}
 
-	cursor, err := database.AlbumCollection.Find(context.Background(), searchParams, findOptions)
+	cursor, err := database.TaskCollection.Find(context.Background(), searchParams, findOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for cursor.Next(context.Background()) {
-		var album models.Album
+		var task models.Task
 
-		err := cursor.Decode(&album)
+		err := cursor.Decode(&task)
 		if err != nil {
 			return nil, err
 		}
 
-		albums = append(albums, album)
+		tasks = append(tasks, task)
 	}
 
-	return albums, nil
+	return tasks, nil
 }
 
-func FindAlbumById(id string) (models.Album, error) {
+func FindTaskById(id string) (models.Task, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
-	var album models.Album
+	var task models.Task
 
 	if err != nil {
-		return album, err
+		return task, err
 	}
 
-	err = database.AlbumCollection.FindOne(context.Background(), bson.M{"_id": oid}).Decode(&album)
+	err = database.TaskCollection.FindOne(context.Background(), bson.M{"_id": oid}).Decode(&task)
 	if err != nil {
-		return album, err
+		return task, err
 	}
 
-	err = database.AlbumCollection.FindOne(context.Background(), bson.M{"_id": oid}).Decode(&album)
+	err = database.TaskCollection.FindOne(context.Background(), bson.M{"_id": oid}).Decode(&task)
 	if err != nil {
-		return album, err
+		return task, err
 	}
 
-	return album, nil
+	return task, nil
 }
 
-func CreateAlbum(album models.Album) (models.Album, error) {
-	album.ID = primitive.NewObjectID()
-	album.CreatedAt = time.Now()
-	album.UpdatedAt = time.Now()
+func CreateTask(task models.Task) (models.Task, error) {
+	task.ID = primitive.NewObjectID()
+	task.CreatedAt = time.Now()
+	task.UpdatedAt = time.Now()
 
-	_, err := database.AlbumCollection.InsertOne(context.Background(), album)
+	_, err := database.TaskCollection.InsertOne(context.Background(), task)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return album, nil
+	return task, nil
 }
 
-func UpdateAlbumById(id string, album models.Album) (models.Album, error) {
+func UpdateTaskById(id string, task models.Task) (models.Task, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return album, err
+		return task, err
 	}
 
-	err = database.AlbumCollection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
+	err = database.TaskCollection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
 	if err != nil {
-		return album, err
+		return task, err
 	}
 
-	album.UpdatedAt = time.Now()
-	album.ID = oid
+	task.UpdatedAt = time.Now()
+	task.ID = oid
 
-	_, err = database.AlbumCollection.UpdateOne(
+	_, err = database.TaskCollection.UpdateOne(
 		context.Background(),
 		bson.M{"_id": oid},
-		bson.D{{Key: "$set", Value: album}},
+		bson.D{{Key: "$set", Value: task}},
 	)
 	if err != nil {
-		return album, err
+		return task, err
 	}
 
-	return album, nil
+	return task, nil
 }
 
-func DeleteAlbumById(id string) error {
+func DeleteTaskById(id string) error {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	err = database.AlbumCollection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
+	err = database.TaskCollection.FindOne(context.Background(), bson.M{"_id": oid}).Err()
 	if err != nil {
 		return err
 	}
 
-	_, err = database.AlbumCollection.DeleteOne(context.Background(), bson.M{"_id": oid})
+	_, err = database.TaskCollection.DeleteOne(context.Background(), bson.M{"_id": oid})
 	if err != nil {
 		return err
 	}

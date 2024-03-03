@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
+	awsservice "github.com/AthirsonSilva/music-streaming-api/cmd/server/aws"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"log"
 	"net/http"
@@ -13,12 +15,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// SignUp @Summary Creates an user
+// SignUp @Summary Creates a user
 //
 //	@Tags		users
 //	@Accept		application/json
 //	@Produce	application/json
-//	@Param		user	body		models.UserRequest	true	"User request"
+//	@Param		user	formData	models.UserRequest	true	"User request"
+//	@Param		file	formData	file				false   "File"
 //	@Success	200		{object}	api.Response
 //	@Failure	500		{object}	api.Exception
 //	@Failure	400		{object}	api.Exception
@@ -28,11 +31,17 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	var request models.UserRequest
 	var response api.Response
 
-	if err := api.ReadBody(req, &request); err != nil {
-		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
+	username := req.FormValue("username")
+	email := req.FormValue("email")
+	password := req.FormValue("password")
+	if username == "" || email == "" || password == "" {
+		api.Error(res, req, "Username, email and password are required", errors.New("username, email and password are required"), http.StatusBadRequest)
 		return
 	}
 
+	request.Username = username
+	request.Email = email
+	request.Password = password
 	if err := request.Validate(); err != nil {
 		api.Error(res, req, "Validation error", err, http.StatusBadRequest)
 		return
@@ -50,13 +59,26 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 		api.Error(res, req, "Error while creating user'", err, http.StatusInternalServerError)
 		return
 	}
-
 	user.Password = string(hashedPassword)
+
+	photoUrl, fileName, err := api.FileUpload(req)
+	if err != nil {
+		api.Error(res, req, "Error while uploading photo", err, http.StatusInternalServerError)
+		return
+	}
+
 	user, err = repositories.CreateUser(user)
 	if err != nil {
 		api.Error(res, req, "Error while creating user", err, http.StatusInternalServerError)
 		return
 	}
+
+	go func() {
+		err := awsservice.PutBucketObject(fileName, photoUrl)
+		if err != nil {
+			log.Printf("Error while uploading photo to S3 => %s", err)
+		}
+	}()
 
 	var prefix string
 	if os.Getenv("ENV") == "production" {

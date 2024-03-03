@@ -9,9 +9,9 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 )
 
-// FindAllAlbums @Summary Find all albums
+// FindAllTasks @Summary Find all tasks
 //
-//	@Tags		albums
+//	@Tags		tasks
 //	@Produce	json
 //	@Success	200				{object}	api.Response
 //	@Failure	500				{object}	api.Exception
@@ -23,8 +23,8 @@ import (
 //	@Param		field			query		string	false	"field"		default(created_at)
 //	@Param		direction		query		int		false	"direction"	default(-1)
 //	@Param		searchName		query		string	false	"searchName"
-//	@Router		/api/v1/albums [get]
-func FindAllAlbums(res http.ResponseWriter, req *http.Request) {
+//	@Router		/api/v1/tasks [get]
+func FindAllTasks(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	paginationInfo, errorData := api.GetPaginationInfo(req)
@@ -33,21 +33,21 @@ func FindAllAlbums(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	albums, err := repositories.FindAllAlbums(paginationInfo)
+	tasks, err := repositories.FindAllTasks(paginationInfo)
 	if err != nil {
-		api.Error(res, req, "Error while finding albums", err, http.StatusInternalServerError)
+		api.Error(res, req, "Error while finding tasks", err, http.StatusInternalServerError)
 		return
 	}
 
-	var albumsResponse []models.AlbumResponse
-	for _, album := range albums {
-		response := album.ToResponse()
-		albumsResponse = append(albumsResponse, response)
+	var tasksResponse []models.TaskResponse
+	for _, task := range tasks {
+		response := task.ToResponse()
+		tasksResponse = append(tasksResponse, response)
 	}
 
 	response = api.Response{
-		Message: "Albums found",
-		Data:    albumsResponse,
+		Message: "Tasks found",
+		Data:    tasksResponse,
 	}
 	api.JSON(res, response, http.StatusOK)
 }

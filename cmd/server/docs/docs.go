@@ -20,13 +20,13 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/albums": {
+        "/api/v1/tasks": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "albums"
+                    "tasks"
                 ],
                 "parameters": [
                     {
@@ -106,7 +106,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "albums"
+                    "tasks"
                 ],
                 "parameters": [
                     {
@@ -117,23 +117,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "name": "artist",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "title",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "File",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
+                        "description": "Task request",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.TaskRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -164,18 +154,18 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/albums/{id}": {
+        "/api/v1/tasks/{id}": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "albums"
+                    "tasks"
                 ],
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Album ID",
+                        "description": "Task ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -223,21 +213,21 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "albums"
+                    "tasks"
                 ],
                 "parameters": [
                     {
-                        "description": "Album request",
-                        "name": "album",
+                        "description": "Task request",
+                        "name": "task",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.AlbumRequest"
+                            "$ref": "#/definitions/models.TaskRequest"
                         }
                     },
                     {
                         "type": "string",
-                        "description": "Album ID",
+                        "description": "Task ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -282,12 +272,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "albums"
+                    "tasks"
                 ],
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Album ID",
+                        "description": "Task ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -397,13 +387,25 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
-                        "description": "User request",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UserRequest"
-                        }
+                        "type": "string",
+                        "name": "email",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "password",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "username",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "File",
+                        "name": "file",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -559,31 +561,19 @@ const docTemplate = `{
                 }
             }
         },
-        "models.AlbumRequest": {
+        "models.TaskRequest": {
             "type": "object",
             "required": [
-                "artist",
                 "title"
             ],
             "properties": {
-                "artist": {
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserRequest": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
                     "type": "string"
                 }
             }
@@ -597,7 +587,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Music Streaming Swagger API",
+	Title:            "TODO list Swagger API",
 	Description:      "Swagger API for Golang Project Music Streaming API",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-var bucketName = "music-api-golang"
+var bucketName = "todo-list-golang"
 
 func getClient() *s3.Client {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
