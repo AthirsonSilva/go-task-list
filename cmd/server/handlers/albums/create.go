@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	awsservice "github.com/AthirsonSilva/music-streaming-api/cmd/server/aws"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"log"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -36,7 +38,7 @@ func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 	request.Artist = artistInput
 
 	album := request.ToModel()
-	photoUrl, err := api.FileUpload(req)
+	photoUrl, fileName, err := api.FileUpload(req)
 	if err != nil {
 		api.Error(res, req, "Error while uploading photo", err, http.StatusInternalServerError)
 		return
@@ -48,6 +50,13 @@ func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 		api.Error(res, req, "Error while creating album", err, http.StatusInternalServerError)
 		return
 	}
+
+	go func() {
+		err := awsservice.PutBucketObject(fileName, photoUrl)
+		if err != nil {
+			log.Printf("Error while uploading photo to S3 => %s", err)
+		}
+	}()
 
 	response = api.Response{
 		Message: "Album created",

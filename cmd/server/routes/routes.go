@@ -1,13 +1,13 @@
 package routes
 
 import (
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"net/http"
 
 	albums "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/albums"
 	users "github.com/AthirsonSilva/music-streaming-api/cmd/server/handlers/users"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/middlewares"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 

@@ -170,29 +170,29 @@ func GetPaginationInfo(req *http.Request) (Pagination, Response) {
 	return pagination, Response{}
 }
 
-func FileUpload(r *http.Request) (string, error) {
-	err := r.ParseMultipartForm(32 << 20) // 32MB max
+func FileUpload(r *http.Request) (filePath string, fileName string, err error) {
+	err = r.ParseMultipartForm(32 << 20) // 32MB max
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	defer file.Close()
 
-	// This is path which we want to store the file
-	f, err := os.OpenFile("/tmp/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	filePath = "/tmp/" + handler.Filename
+	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	defer f.Close()
 
 	_, err = io.Copy(f, file)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return handler.Filename, nil
+	return filePath, handler.Filename, nil
 }
