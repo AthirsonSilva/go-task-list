@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"net/http"
 
@@ -31,7 +32,27 @@ func CreateTask(res http.ResponseWriter, req *http.Request) {
 
 	task := request.ToModel()
 	task.Finished = false
-	task, err := repositories.CreateTask(task)
+
+	token, err := api.AuthToken(req)
+	if err != nil {
+		api.Error(res, req, "Error while creating task", err, http.StatusUnauthorized)
+		return
+	}
+
+	claims, err := authentication.GetTokenInfo(token)
+	if err != nil {
+		api.Error(res, req, "Error while creating task", err, http.StatusUnauthorized)
+		return
+	}
+
+	user, err := repositories.FindUserByEmail(claims.Username)
+	if err != nil {
+		api.Error(res, req, "Error while creating task", err, http.StatusInternalServerError)
+		return
+	}
+
+	task.User = user
+	task, err = repositories.CreateTask(task)
 	if err != nil {
 		api.Error(res, req, "Error while creating task", err, http.StatusInternalServerError)
 		return

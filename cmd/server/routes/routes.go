@@ -27,7 +27,7 @@ func Routes() http.Handler {
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))
 
-	router.Route("/api/v1/task", TaskRoutes)
+	router.Route("/api/v1/tasks", TaskRoutes)
 	router.Route("/api/v1/users", UserRoutes)
 
 	return router
