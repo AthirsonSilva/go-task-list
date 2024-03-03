@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -24,9 +25,15 @@ var (
 )
 
 func (db *DatabaseInstance) Connect() {
-	log.Println("Connecting to MongoDB...")
-
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	var clientOptions *options.ClientOptions
+	database_uri := os.Getenv("DATABASE_URL")
+	if database_uri != "" {
+		log.Printf("Connecting to MongoDB...")
+		clientOptions = options.Client().ApplyURI("mongodb://localhost:27017/music-api")
+	} else {
+		log.Printf("Connecting to MongoDB with URI => %s", database_uri)
+		clientOptions = options.Client().ApplyURI(database_uri)
+	}
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
@@ -71,7 +78,10 @@ func migrateData(mongoCollection *mongo.Collection, collectionName string) {
 }
 
 func generateModel(entity string) any {
-	gofakeit.Seed(time.Now().UnixNano())
+	err := gofakeit.Seed(time.Now().UnixNano())
+	if err != nil {
+		return nil
+	}
 
 	switch entity {
 	case "album":

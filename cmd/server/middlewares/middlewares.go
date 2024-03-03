@@ -1,12 +1,12 @@
 package middlewares
 
 import (
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/time/rate"
 )
@@ -16,7 +16,10 @@ func RateLimiter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		if !limiter.Allow() {
 			res.WriteHeader(http.StatusTooManyRequests)
-			res.Write([]byte("Too many requests"))
+			_, err := res.Write([]byte("Too many requests"))
+			if err != nil {
+				return
+			}
 			return
 		} else {
 			next.ServeHTTP(res, req)
@@ -61,7 +64,6 @@ func VerifyAuthentication(next http.Handler) http.Handler {
 		token, err := jwt.ParseWithClaims(rawToken, &claims, func(token *jwt.Token) (interface{}, error) {
 			return authentication.JwtKey, nil
 		})
-
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
 				response := api.Response{

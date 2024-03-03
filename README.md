@@ -9,27 +9,27 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 
 ## Project Features
 
-| Feature                              | Status       |
-| -----------------------------------  | ------------ |
-| Consistent API design                | 🟢 Ready     |
-| Use of DTOs                          | 🟢 Ready     |
-| Authentication with JWT              | 🟢 Ready     |
-| Caching with Redis                   | 🔴 Not Ready |
-| Data generation                      | 🟢 Ready     |
-| Documentation with SwaggerUI         | 🟢 Ready     |
-| Pagination, sorting and searching    | 🟢 Ready     |
-| Mailing service                      | 🟢 Ready     |
-| AI Recomendation service             | 🔴 Not Ready |
-| Layered architecture                 | 🟢 Ready     |
-| Error Handling                       | 🟢 Ready     |
-| API versioning                       | 🟢 Ready     |
-| Excel, CSV and PDF exporting         | 🔴 Not Ready |
-| File upload and download             | 🔴 Not Ready |
-| Rate Limiting                        | 🟢 Ready     |
-| Data Encryption                      | 🟢 Ready     |
-| Asynchronous/ brackground tasks      | 🟢 Ready     |
-| Logging                              | 🟢 Ready     |
-| CI/ CD with Docker and Railway       | 🟢 Ready     |
+| Feature                           | Status       |
+|-----------------------------------|--------------|
+| Consistent API design             | 🟢 Ready     |
+| Use of DTOs                       | 🟢 Ready     |
+| Authentication with JWT           | 🟢 Ready     |
+| Caching with Redis                | 🔴 Not Ready |
+| Data generation                   | 🟢 Ready     |
+| Documentation with SwaggerUI      | 🟢 Ready     |
+| Pagination, sorting and searching | 🟢 Ready     |
+| Mailing service                   | 🟢 Ready     |
+| AI Recommendation service         | 🔴 Not Ready |
+| Layered architecture              | 🟢 Ready     |
+| Error Handling                    | 🟢 Ready     |
+| API versioning                    | 🟢 Ready     |
+| Excel, CSV and PDF exporting      | 🔴 Not Ready |
+| File upload and download          | 🔴 Not Ready |
+| Rate Limiting                     | 🟢 Ready     |
+| Data Encryption                   | 🟢 Ready     |
+| Asynchronous/ background tasks    | 🟢 Ready     |
+| Logging                           | 🟢 Ready     |
+| CI/ CD with Docker and Railway    | 🟢 Ready     |
 
 
 ## Getting Started
