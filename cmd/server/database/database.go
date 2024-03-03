@@ -14,25 +14,25 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type DatabaseInstance struct {
+type Instance struct {
 	Client *mongo.Client
 }
 
 var (
-	Database        *DatabaseInstance
+	Database        *Instance
 	AlbumCollection *mongo.Collection
 	UserCollection  *mongo.Collection
 )
 
-func (db *DatabaseInstance) Connect() {
+func (db *Instance) Connect() {
 	var clientOptions *options.ClientOptions
-	database_uri := os.Getenv("DATABASE_URL")
-	if database_uri != "" {
-		log.Printf("Connecting to MongoDB...")
+	databaseUri := os.Getenv("MONGO_URL")
+	if databaseUri == "" {
+		log.Printf("Attempting to connect to local MongoDB instance")
 		clientOptions = options.Client().ApplyURI("mongodb://localhost:27017/music-api")
 	} else {
-		log.Printf("Connecting to MongoDB with URI => %s", database_uri)
-		clientOptions = options.Client().ApplyURI(database_uri)
+		log.Printf("Connecting to MongoDB with URI => %s", databaseUri)
+		clientOptions = options.Client().ApplyURI(databaseUri)
 	}
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
@@ -51,7 +51,7 @@ func (db *DatabaseInstance) Connect() {
 	AlbumCollection = client.Database("music-api").Collection("albums")
 	UserCollection = client.Database("music-api").Collection("users")
 
-	Database = &DatabaseInstance{Client: client}
+	Database = &Instance{Client: client}
 
 	go migrateData(AlbumCollection, "album")
 	go migrateData(UserCollection, "user")
