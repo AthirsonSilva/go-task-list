@@ -2,26 +2,27 @@ package handlers
 
 import (
 	"encoding/json"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"net/http"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// @Summary SignIn the user and returns a JWT token
-// @Tags users
-// @Accept  application/json
-// @Produce  application/json
-// @Param user body authentication.Credentials true "SignUp request"
-// @Success 200 {object} api.Response
-// @Failure 500 {object} api.Exception
-// @Failure 400 {object} api.Exception
-// @Failure 429 {object} api.Exception
-// @Router /api/v1/users/signin [post]
+// SignIn @Summary the user and returns a JWT token
+//
+//	@Tags		users
+//	@Accept		application/json
+//	@Produce	application/json
+//	@Param		user	body		authentication.Credentials	true	"SignUp request"
+//	@Success	200		{object}	api.Response
+//	@Failure	500		{object}	api.Exception
+//	@Failure	400		{object}	api.Exception
+//	@Failure	429		{object}	api.Exception
+//	@Router		/api/v1/users/signin [post]
 func SignIn(res http.ResponseWriter, req *http.Request) {
 	var creds authentication.Credentials
 	var response api.Response

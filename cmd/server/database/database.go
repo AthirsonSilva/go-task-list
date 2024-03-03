@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -13,20 +14,26 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type DatabaseInstance struct {
+type Instance struct {
 	Client *mongo.Client
 }
 
 var (
-	Database        *DatabaseInstance
+	Database        *Instance
 	AlbumCollection *mongo.Collection
 	UserCollection  *mongo.Collection
 )
 
-func (db *DatabaseInstance) Connect() {
-	log.Println("Connecting to MongoDB...")
-
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+func (db *Instance) Connect() {
+	var clientOptions *options.ClientOptions
+	databaseUri := os.Getenv("MONGO_URL")
+	if databaseUri == "" {
+		log.Printf("Attempting to connect to local MongoDB instance")
+		clientOptions = options.Client().ApplyURI("mongodb://localhost:27017/music-api")
+	} else {
+		log.Printf("Connecting to MongoDB with URI => %s", databaseUri)
+		clientOptions = options.Client().ApplyURI(databaseUri)
+	}
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
@@ -44,7 +51,7 @@ func (db *DatabaseInstance) Connect() {
 	AlbumCollection = client.Database("music-api").Collection("albums")
 	UserCollection = client.Database("music-api").Collection("users")
 
-	Database = &DatabaseInstance{Client: client}
+	Database = &Instance{Client: client}
 
 	go migrateData(AlbumCollection, "album")
 	go migrateData(UserCollection, "user")
@@ -71,14 +78,16 @@ func migrateData(mongoCollection *mongo.Collection, collectionName string) {
 }
 
 func generateModel(entity string) any {
-	gofakeit.Seed(time.Now().UnixNano())
+	err := gofakeit.Seed(time.Now().UnixNano())
+	if err != nil {
+		return nil
+	}
 
 	switch entity {
 	case "album":
 		return models.Album{
 			Artist:    gofakeit.Name(),
 			Title:     gofakeit.Sentence(3),
-			Price:     gofakeit.Price(0, 100),
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		}

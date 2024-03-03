@@ -1,35 +1,49 @@
 package handlers
 
 import (
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 )
 
-// @Summary Creates an album
-// @Tags albums
-// @Accept  application/json
-// @Produce  application/json
-// @Param album body models.AlbumRequest true "Album request"
-// @Success 200 {object} api.Response
-// @Failure 500 {object} api.Exception
-// @Failure 400 {object} api.Exception
-// @Failure 429 {object} api.Exception
-// @Param Authorization header string true "Authorization"
-// @Router /api/v1/albums [post]
+// CreateAlbum @Summary Creates an album
+//
+//	@Tags		albums
+//	@Accept		application/json
+//	@Produce	application/json
+//	@Success	200				{object}	api.Response
+//	@Failure	500				{object}	api.Exception
+//	@Failure	400				{object}	api.Exception
+//	@Failure	429				{object}	api.Exception
+//	@Param		Authorization	header		string				true	"Authorization"
+//	@Param		album			formData	models.AlbumRequest	true	"Album request"
+//	@Param		file			formData	file				true	"File"
+//	@Router		/api/v1/albums [post]
 func CreateAlbum(res http.ResponseWriter, req *http.Request) {
 	var request models.AlbumRequest
 	var response api.Response
 
-	if err := api.ReadBody(req, &request); err != nil {
-		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
+	artistInput := req.FormValue("artist")
+	titleInput := req.FormValue("title")
+	if artistInput == "" || titleInput == "" {
+		api.Error(res, req, "Artist or title cannot be empty", nil, http.StatusBadRequest)
 		return
 	}
 
+	request.Title = titleInput
+	request.Artist = artistInput
+
 	album := request.ToModel()
-	album, err := repositories.CreateAlbum(album)
+	photoUrl, err := api.FileUpload(req)
+	if err != nil {
+		api.Error(res, req, "Error while uploading photo", err, http.StatusInternalServerError)
+		return
+	}
+
+	album.PhotoUrl = photoUrl
+	album, err = repositories.CreateAlbum(album)
 	if err != nil {
 		api.Error(res, req, "Error while creating album", err, http.StatusInternalServerError)
 		return

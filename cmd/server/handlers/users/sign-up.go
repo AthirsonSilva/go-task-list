@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"log"
 	"net/http"
 	"os"
@@ -9,20 +10,20 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models/dto"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// @Summary Creates an user
-// @Tags users
-// @Accept  application/json
-// @Produce  application/json
-// @Param user body models.UserRequest true "User request"
-// @Success 200 {object} api.Response
-// @Failure 500 {object} api.Exception
-// @Failure 400 {object} api.Exception
-// @Failure 429 {object} api.Exception
-// @Router /api/v1/users/signup [post]
+// SignUp @Summary Creates an user
+//
+//	@Tags		users
+//	@Accept		application/json
+//	@Produce	application/json
+//	@Param		user	body		models.UserRequest	true	"User request"
+//	@Success	200		{object}	api.Response
+//	@Failure	500		{object}	api.Exception
+//	@Failure	400		{object}	api.Exception
+//	@Failure	429		{object}	api.Exception
+//	@Router		/api/v1/users/signup [post]
 func SignUp(res http.ResponseWriter, req *http.Request) {
 	var request models.UserRequest
 	var response api.Response

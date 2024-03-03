@@ -2,12 +2,12 @@ package repositories
 
 import (
 	"context"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"log"
 	"time"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/utils/api"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -25,15 +25,15 @@ func setFindOptions(options *options.FindOptions, pagination api.Pagination) {
 
 func FindAllAlbums(pagination api.Pagination) ([]models.Album, error) {
 	var albums []models.Album
-	var options = options.Find()
-	setFindOptions(options, pagination)
+	var findOptions = options.Find()
+	setFindOptions(findOptions, pagination)
 
 	searchParams := bson.M{}
 	if pagination.SearchName != "" {
-		searchParams["title"] = bson.M{"$regex": pagination.SearchName, "$options": "i"}
+		searchParams["title"] = bson.M{"$regex": pagination.SearchName, "$findOptions": "i"}
 	}
 
-	cursor, err := database.AlbumCollection.Find(context.Background(), searchParams, options)
+	cursor, err := database.AlbumCollection.Find(context.Background(), searchParams, findOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +41,10 @@ func FindAllAlbums(pagination api.Pagination) ([]models.Album, error) {
 	for cursor.Next(context.Background()) {
 		var album models.Album
 
-		cursor.Decode(&album)
+		err := cursor.Decode(&album)
+		if err != nil {
+			return nil, err
+		}
 
 		albums = append(albums, album)
 	}
