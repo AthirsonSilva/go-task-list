@@ -24,7 +24,7 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Error Handling                    | 🟢 Ready     |
 | API versioning                    | 🟢 Ready     |
 | Excel, CSV and PDF exporting      | 🔴 Not Ready |
-| File upload and download          | 🔴 Not Ready |
+| File upload and download          | 🟢 Ready     |
 | Rate Limiting                     | 🟢 Ready     |
 | Data Encryption                   | 🟢 Ready     |
 | Asynchronous/ background tasks    | 🟢 Ready     |
