@@ -1,4 +1,4 @@
-# TODO list
+# Task list
 
 Simple Web Restful API made with Golang, MongoDB and Chi framework
 
@@ -38,13 +38,13 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 #### Clone the repository:
 
 ```bash
-git clone https://github.com/athirsonsilva/go-todo-list.git
+git clone https://github.com/athirsonsilva/go-task-list.git
 ```
 
 #### Navigate to the project directory:
 
 ```bash
-cd go-todo-list
+cd go-task-list
 ```
 
 #### Install the dependencies:
