@@ -1,14 +1,11 @@
 package middlewares
 
 import (
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"golang.org/x/time/rate"
 	"log"
 	"net/http"
-	"time"
-
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
-	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/time/rate"
 )
 
 func RateLimiter(next http.Handler) http.Handler {
@@ -60,33 +57,10 @@ func VerifyAuthentication(next http.Handler) http.Handler {
 			return
 		}
 
-		claims := authentication.Claims{}
-		token, err := jwt.ParseWithClaims(rawToken, &claims, func(token *jwt.Token) (interface{}, error) {
-			return authentication.JwtKey, nil
-		})
+		claims, err := authentication.GetTokenInfo(rawToken)
 		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				response := api.Response{
-					Message: "Invalid JWT token signature",
-					Data:    nil,
-				}
-				api.JSON(res, response, http.StatusBadRequest)
-				return
-			} else if !token.Valid {
-				response := api.Response{
-					Message: "Invalid JWT token",
-					Data:    nil,
-				}
-				api.JSON(res, response, http.StatusUnauthorized)
-				return
-			} else if time.Until(claims.ExpiresAt.Time) < 0 {
-				response := api.Response{
-					Message: "Provided token is expired",
-					Data:    nil,
-				}
-				api.JSON(res, response, http.StatusUnauthorized)
-				return
-			}
+			api.Error(res, req, "Invalid or expired token", err, http.StatusUnauthorized)
+			return
 		}
 
 		log.Printf("User logged in: %s", claims.Username)

@@ -2,17 +2,17 @@ package handlers
 
 import (
 	"crypto/tls"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"log"
 	"net/smtp"
 	"os"
 	"strconv"
 	"time"
 
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models/dto"
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
-var EmailChannel = make(chan dto.EmailData)
+var EmailChannel = make(chan models.EmailDto)
 var (
 	host     = os.Getenv("SMTP_HOST")
 	port     = os.Getenv("SMTP_PORT")
@@ -31,7 +31,7 @@ func ListenForEmail() {
 	}()
 }
 
-func SendSimpleEmailMessage(emailData dto.EmailData) {
+func SendSimpleEmailMessage(emailData models.EmailDto) {
 	log.Println("Sending email...")
 
 	port, err := strconv.Atoi(port)
@@ -77,7 +77,7 @@ func SendSimpleEmailMessage(emailData dto.EmailData) {
 	log.Println("Email sent!")
 }
 
-func SendVerificationEmail(emailData dto.EmailData) {
+func SendVerificationEmail(emailData models.EmailDto) {
 	log.Println("Sending email...")
 
 	authenticate := smtp.PlainAuth("", from, password, host)

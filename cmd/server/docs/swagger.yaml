@@ -22,24 +22,16 @@ definitions:
       password:
         type: string
     type: object
-  models.AlbumRequest:
+  models.TaskRequest:
     properties:
-      artist:
+      description:
+        type: string
+      end_date:
         type: string
       title:
         type: string
     required:
-    - artist
     - title
-    type: object
-  models.UserRequest:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-      username:
-        type: string
     type: object
 info:
   contact: {}
@@ -48,10 +40,10 @@ info:
     name: MIT
     url: https://github.com/AthrsonsSilva/music-streaming-api
   termsOfService: http://swagger.io/terms/
-  title: Music Streaming Swagger API
+  title: TODO list Swagger API
   version: "1.0"
 paths:
-  /api/v1/albums:
+  /api/v1/tasks:
     get:
       parameters:
       - description: Authorization
@@ -103,7 +95,7 @@ paths:
           schema:
             $ref: '#/definitions/api.Exception'
       tags:
-      - albums
+      - tasks
     post:
       consumes:
       - application/json
@@ -113,19 +105,12 @@ paths:
         name: Authorization
         required: true
         type: string
-      - in: formData
-        name: artist
+      - description: Task request
+        in: body
+        name: task
         required: true
-        type: string
-      - in: formData
-        name: title
-        required: true
-        type: string
-      - description: File
-        in: formData
-        name: file
-        required: true
-        type: file
+        schema:
+          $ref: '#/definitions/models.TaskRequest'
       produces:
       - application/json
       responses:
@@ -146,11 +131,11 @@ paths:
           schema:
             $ref: '#/definitions/api.Exception'
       tags:
-      - albums
-  /api/v1/albums/{id}:
+      - tasks
+  /api/v1/tasks/{id}:
     delete:
       parameters:
-      - description: Album ID
+      - description: Task ID
         in: path
         name: id
         required: true
@@ -184,10 +169,10 @@ paths:
           schema:
             $ref: '#/definitions/api.Exception'
       tags:
-      - albums
+      - tasks
     get:
       parameters:
-      - description: Album ID
+      - description: Task ID
         in: path
         name: id
         required: true
@@ -217,18 +202,18 @@ paths:
           schema:
             $ref: '#/definitions/api.Exception'
       tags:
-      - albums
+      - tasks
     put:
       consumes:
       - application/json
       parameters:
-      - description: Album request
+      - description: Task request
         in: body
-        name: album
+        name: task
         required: true
         schema:
-          $ref: '#/definitions/models.AlbumRequest'
-      - description: Album ID
+          $ref: '#/definitions/models.TaskRequest'
+      - description: Task ID
         in: path
         name: id
         required: true
@@ -258,7 +243,7 @@ paths:
           schema:
             $ref: '#/definitions/api.Exception'
       tags:
-      - albums
+      - tasks
   /api/v1/users/{id}:
     get:
       parameters:
@@ -325,12 +310,19 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: User request
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserRequest'
+      - in: formData
+        name: email
+        type: string
+      - in: formData
+        name: password
+        type: string
+      - in: formData
+        name: username
+        type: string
+      - description: File
+        in: formData
+        name: file
+        type: file
       produces:
       - application/json
       responses:

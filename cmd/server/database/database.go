@@ -19,9 +19,9 @@ type Instance struct {
 }
 
 var (
-	Database        *Instance
-	AlbumCollection *mongo.Collection
-	UserCollection  *mongo.Collection
+	Database       *Instance
+	TaskCollection *mongo.Collection
+	UserCollection *mongo.Collection
 )
 
 func (db *Instance) Connect() {
@@ -29,7 +29,7 @@ func (db *Instance) Connect() {
 	databaseUri := os.Getenv("MONGO_URL")
 	if databaseUri == "" {
 		log.Printf("Attempting to connect to local MongoDB instance")
-		clientOptions = options.Client().ApplyURI("mongodb://localhost:27017/music-api")
+		clientOptions = options.Client().ApplyURI("mongodb://localhost:27017/todo-list-api")
 	} else {
 		log.Printf("Connecting to MongoDB with URI => %s", databaseUri)
 		clientOptions = options.Client().ApplyURI(databaseUri)
@@ -48,12 +48,12 @@ func (db *Instance) Connect() {
 
 	log.Println("Connected to MongoDB!")
 
-	AlbumCollection = client.Database("music-api").Collection("albums")
+	TaskCollection = client.Database("music-api").Collection("tasks")
 	UserCollection = client.Database("music-api").Collection("users")
 
 	Database = &Instance{Client: client}
 
-	go migrateData(AlbumCollection, "album")
+	go migrateData(TaskCollection, "task")
 	go migrateData(UserCollection, "user")
 }
 
@@ -84,12 +84,15 @@ func generateModel(entity string) any {
 	}
 
 	switch entity {
-	case "album":
-		return models.Album{
-			Artist:    gofakeit.Name(),
-			Title:     gofakeit.Sentence(3),
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
+	case "task":
+		return models.Task{
+			Title:       gofakeit.Sentence(2),
+			Description: gofakeit.Sentence(4),
+			Finished:    false,
+			EndDate:     time.Now(),
+			User:        models.User{},
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
 		}
 	case "user":
 		password := gofakeit.Password(true, true, true, true, true, 8)

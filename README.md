@@ -1,4 +1,4 @@
-# Music streaming API
+# Task list
 
 Simple Web Restful API made with Golang, MongoDB and Chi framework
 
@@ -24,6 +24,7 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Error Handling                    | 🟢 Ready     |
 | API versioning                    | 🟢 Ready     |
 | Excel, CSV and PDF exporting      | 🔴 Not Ready |
+| AWS S3 service integration        | 🟢 Ready     |
 | File upload and download          | 🟢 Ready     |
 | Rate Limiting                     | 🟢 Ready     |
 | Data Encryption                   | 🟢 Ready     |
@@ -37,13 +38,13 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 #### Clone the repository:
 
 ```bash
-git clone https://github.com/athirsonsilva/music-streaming-api.git
+git clone https://github.com/athirsonsilva/go-task-list.git
 ```
 
 #### Navigate to the project directory:
 
 ```bash
-cd music-streaming-api
+cd go-task-list
 ```
 
 #### Install the dependencies:
