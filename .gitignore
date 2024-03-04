@@ -1,6 +1,6 @@
-/tmp/
 app
 **/__debug_bin*
 .env
 /.idea/
-/.vscode/
+/.vscode/!/cmd/server/tmp/
+!/tmp/

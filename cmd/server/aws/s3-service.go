@@ -56,14 +56,13 @@ func PutBucketObject(key string, filePath string) (s3FilePath string, err error)
 		StorageClass:       "INTELLIGENT_TIERING",
 	}
 
-	output, err := getClient().PutObject(context.TODO(), putObject)
+	_, err = getClient().PutObject(context.TODO(), putObject)
 	if err != nil {
 		log.Fatal(err)
 		return "", err
 	}
 
-	log.Println("Successfully uploaded to S3", output)
-
 	photoUrl := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", bucketName, key)
+	log.Printf("Successfully uploaded to S3 => %s", photoUrl)
 	return photoUrl, nil
 }

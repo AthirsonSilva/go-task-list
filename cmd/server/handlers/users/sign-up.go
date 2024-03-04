@@ -73,20 +73,21 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if photoUrl != "" {
-		filePath := "/tmp/" + fileName
-		key := "users/" + user.ID.Hex() + "-" + user.Username
+		go func() {
+			filePath := "/tmp/" + fileName
+			key := "users/" + user.ID.Hex() + "-" + user.Username
 
-		s3FilePath, err := awsservice.PutBucketObject(key, filePath)
-		if err != nil {
-			log.Printf("Error while uploading photo: %s", err)
-		}
+			s3FilePath, err := awsservice.PutBucketObject(key, filePath)
+			if err != nil {
+				log.Printf("Error while uploading photo: %s", err)
+			}
 
-		user.PhotoUrl = s3FilePath
-		_, err = repositories.UpdateUserByID(user)
-		if err != nil {
-			api.Error(res, req, "Error while updating user", err, http.StatusInternalServerError)
-			return
-		}
+			user.PhotoUrl = s3FilePath
+			_, err = repositories.UpdateUserByID(user)
+			if err != nil {
+				log.Printf("Error while uploading photo: %s", err)
+			}
+		}()
 	}
 
 	var prefix string
@@ -113,9 +114,10 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	}
 	EmailChannel <- emailData
 
+	userResponse := user.ToResponse()
 	response = api.Response{
 		Message: "User registered successfully! Check your email to verify your account",
-		Data:    user,
+		Data:    userResponse,
 	}
 	api.JSON(res, response, http.StatusCreated)
 }
