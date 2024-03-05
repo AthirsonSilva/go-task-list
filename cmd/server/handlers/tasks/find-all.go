@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"net/http"
 
@@ -33,7 +34,13 @@ func FindAllTasks(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	tasks, err := repositories.FindAllTasks(paginationInfo)
+	user, err := authentication.GetUserFromToken(req)
+	if err != nil {
+		api.Error(res, req, "You need to be logged in to get tasks", err, http.StatusInternalServerError)
+		return
+	}
+
+	tasks, err := repositories.FindAllTasks(paginationInfo, user.ID)
 	if err != nil {
 		api.Error(res, req, "Error while finding tasks", err, http.StatusInternalServerError)
 		return

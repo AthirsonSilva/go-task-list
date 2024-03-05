@@ -40,7 +40,7 @@ info:
     name: MIT
     url: https://github.com/AthrsonsSilva/music-streaming-api
   termsOfService: http://swagger.io/terms/
-  title: TODO list Swagger API
+  title: Task list Swagger API
   version: "1.0"
 paths:
   /api/v1/tasks:
@@ -218,6 +218,37 @@ paths:
         name: id
         required: true
         type: string
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Exception'
+      tags:
+      - tasks
+  /api/v1/tasks/export-csv:
+    get:
+      consumes:
+      - application/json
+      parameters:
       - description: Authorization
         in: header
         name: Authorization

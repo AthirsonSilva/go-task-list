@@ -154,6 +154,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/tasks/export-csv": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Exception"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/api.Exception"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.Exception"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/tasks/{id}": {
             "get": {
                 "produces": [
@@ -587,7 +635,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "TODO list Swagger API",
+	Title:            "Task list Swagger API",
 	Description:      "Swagger API for Golang Project Music Streaming API",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

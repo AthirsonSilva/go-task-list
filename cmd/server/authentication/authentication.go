@@ -2,6 +2,11 @@ package authentication
 
 import (
 	"errors"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -29,7 +34,7 @@ func (c *Credentials) Valid() error {
 	return nil
 }
 
-func GetTokenInfo(tokenString string) (Claims, error) {
+func GetTokenInfo(tokenString string) (jwtClaims Claims, err error) {
 	claims := Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 		return JwtKey, nil
@@ -44,4 +49,26 @@ func GetTokenInfo(tokenString string) (Claims, error) {
 		}
 	}
 	return claims, nil
+}
+
+func GetUserFromToken(req *http.Request) (user models.User, err error) {
+	token, err := api.AuthToken(req)
+	if err != nil {
+		return user, err
+	}
+	logger.Info("GetUserFromToken", "token: "+token)
+
+	claims, err := GetTokenInfo(token)
+	if err != nil {
+		return user, err
+	}
+	logger.Info("GetUserFromToken", "username: "+claims.Username)
+
+	user, err = repositories.FindUserByEmail(claims.Username)
+	if err != nil {
+		return user, err
+	}
+	logger.Info("GetUserFromToken", "User found: "+user.ID.Hex())
+
+	return user, nil
 }

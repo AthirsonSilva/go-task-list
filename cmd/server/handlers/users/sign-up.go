@@ -19,7 +19,7 @@ import (
 //	@Accept		application/json
 //	@Produce	application/json
 //	@Param		user	formData	models.UserRequest	true	"User request"
-//	@Param		file	formData	file				false   "File"
+//	@Param		file	formData	file				false	"File"
 //	@Success	200		{object}	api.Response
 //	@Failure	500		{object}	api.Exception
 //	@Failure	400		{object}	api.Exception

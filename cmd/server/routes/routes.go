@@ -37,6 +37,7 @@ func TaskRoutes(router chi.Router) {
 	router.Use(middlewares.VerifyAuthentication)
 	router.Get("/", task.FindAllTasks)
 	router.Get("/{id}", task.FindOneTaskById)
+	router.Get("/export-csv", task.ExportToCsv)
 	router.Post("/", task.CreateTask)
 	router.Put("/{id}", task.UpdateTaskById)
 	router.Delete("/{id}", task.DeleteTaskById)
