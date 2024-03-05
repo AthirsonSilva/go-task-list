@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -30,18 +31,21 @@ func FindAllTasks(res http.ResponseWriter, req *http.Request) {
 
 	paginationInfo, errorData := api.GetPaginationInfo(req)
 	if errorData.Message != "" {
+		logger.Error("FindAllTasks", errorData.Message)
 		api.Error(res, req, errorData.Message, errors.New(errorData.Message), http.StatusBadRequest)
 		return
 	}
 
 	user, err := authentication.GetUserFromToken(req)
 	if err != nil {
+		logger.Error("FindAllTasks", err.Error())
 		api.Error(res, req, "You need to be logged in to get tasks", err, http.StatusInternalServerError)
 		return
 	}
 
 	tasks, err := repositories.FindAllTasks(paginationInfo, user.ID)
 	if err != nil {
+		logger.Error("FindAllTasks", err.Error())
 		api.Error(res, req, "Error while finding tasks", err, http.StatusInternalServerError)
 		return
 	}

@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
@@ -21,12 +22,14 @@ import (
 func VerifyUser(res http.ResponseWriter, req *http.Request) {
 	token := api.Param(req, "token")
 	if token == "" {
+		logger.Error("VerifyUser", "No token provided")
 		api.Error(res, req, "No token provided", errors.New("no token provided"), http.StatusBadRequest)
 		return
 	}
 
 	user, err := repositories.FindUserById(token)
 	if err != nil {
+		logger.Error("VerifyUser", err.Error())
 		api.Error(res, req, "Invalid token", err, http.StatusBadRequest)
 		return
 	}
@@ -34,6 +37,7 @@ func VerifyUser(res http.ResponseWriter, req *http.Request) {
 	user.Enabled = true
 	user, err = repositories.UpdateUserByID(user)
 	if err != nil {
+		logger.Error("VerifyUser", err.Error())
 		api.Error(res, req, "Error while verifying user", err, http.StatusInternalServerError)
 		return
 	}

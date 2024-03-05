@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"log"
 	"os"
 	"time"
@@ -28,10 +29,10 @@ func (db *Instance) Connect() {
 	var clientOptions *options.ClientOptions
 	databaseUri := os.Getenv("MONGO_URL")
 	if databaseUri == "" {
-		log.Printf("Attempting to connect to local MongoDB instance")
+		logger.Info("Connect", "Connecting to MongoDB with URI => mongodb://localhost:27017/todo-list-api")
 		clientOptions = options.Client().ApplyURI("mongodb://localhost:27017/todo-list-api")
 	} else {
-		log.Printf("Connecting to MongoDB with URI => %s", databaseUri)
+		logger.Info("Connect", "Connecting to MongoDB with URI => "+databaseUri)
 		clientOptions = options.Client().ApplyURI(databaseUri)
 	}
 
@@ -46,7 +47,7 @@ func (db *Instance) Connect() {
 		log.Fatal(e)
 	}
 
-	log.Println("Connected to MongoDB!")
+	logger.Info("Connect", "Connected to MongoDB!")
 
 	TaskCollection = client.Database("music-api").Collection("tasks")
 	UserCollection = client.Database("music-api").Collection("users")
@@ -67,8 +68,8 @@ func migrateData(mongoCollection *mongo.Collection, collectionName string) {
 		return
 	}
 
-	for i := range 10 {
-		log.Printf("Inserting %s %d", collectionName, i)
+	for _ = range 10 {
+		logger.Info("migrateData", "Inserting "+collectionName)
 		model := generateModel(collectionName)
 		_, err = mongoCollection.InsertOne(context.Background(), model)
 		if err != nil {
@@ -111,7 +112,7 @@ func generateModel(entity string) any {
 			UpdatedAt: time.Now(),
 		}
 	default:
-		log.Println("Invalid entity")
+		logger.Error("generateModel", "Entity not found")
 		return nil
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 	"net/http"
 	"os"
@@ -38,17 +39,20 @@ func ExportToCsv(res http.ResponseWriter, req *http.Request) {
 
 	user, err := authentication.GetUserFromToken(req)
 	if err != nil {
+		logger.Error("ExportToCsv", err.Error())
 		api.Error(res, req, "You need to be logged in to export tasks", err, http.StatusInternalServerError)
 		return
 	}
 
 	tasks, err := repositories.FindAllTasks(pagination, user.ID)
 	if err != nil {
+		logger.Error("ExportToCsv", err.Error())
 		api.Error(res, req, "Error while getting tasks from database", err, http.StatusInternalServerError)
 		return
 	}
 
 	if len(tasks) == 0 {
+		logger.Error("ExportToCsv", "No tasks found")
 		api.Error(res, req, "No tasks found", err, http.StatusNotFound)
 		return
 	}
@@ -62,12 +66,14 @@ func ExportToCsv(res http.ResponseWriter, req *http.Request) {
 
 	e = writer.WriteAll(data)
 	if e != nil {
+		logger.Error("ExportToCsv", e.Error())
 		api.Error(res, req, "Error while exporting tasks", e, http.StatusInternalServerError)
 		return
 	}
 
 	fileBytes, err := os.ReadFile("./tasks.csv")
 	if err != nil {
+		logger.Error("ExportToCsv", err.Error())
 		api.Error(res, req, "Error while getting tasks from database", err, http.StatusInternalServerError)
 		return
 	}

@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -26,6 +27,7 @@ func CreateTask(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
+		logger.Error("CreateTask", err.Error())
 		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
@@ -35,18 +37,21 @@ func CreateTask(res http.ResponseWriter, req *http.Request) {
 
 	token, err := api.AuthToken(req)
 	if err != nil {
+		logger.Error("CreateTask", err.Error())
 		api.Error(res, req, "Error while creating task", err, http.StatusUnauthorized)
 		return
 	}
 
 	claims, err := authentication.GetTokenInfo(token)
 	if err != nil {
+		logger.Error("CreateTask", err.Error())
 		api.Error(res, req, "Error while creating task", err, http.StatusUnauthorized)
 		return
 	}
 
 	user, err := repositories.FindUserByEmail(claims.Username)
 	if err != nil {
+		logger.Error("CreateTask", err.Error())
 		api.Error(res, req, "Error while creating task", err, http.StatusInternalServerError)
 		return
 	}
@@ -54,6 +59,7 @@ func CreateTask(res http.ResponseWriter, req *http.Request) {
 	task.User = user
 	task, err = repositories.CreateTask(task)
 	if err != nil {
+		logger.Error("CreateTask", err.Error())
 		api.Error(res, req, "Error while creating task", err, http.StatusInternalServerError)
 		return
 	}

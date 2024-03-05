@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"log"
 	"net/http"
 
@@ -31,9 +32,9 @@ func main() {
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Printf("Error loading .env file => %s", err)
+		logger.Error("main", "Error loading .env file => "+err.Error())
 	} else {
-		log.Println("Loaded .env file")
+		logger.Info("main", "Loaded .env file")
 	}
 
 	defer close(handlers.EmailChannel)
@@ -44,7 +45,7 @@ func main() {
 		Handler: routes.Routes(),
 	}
 
-	log.Printf("Server running on port %s", PORT)
+	logger.Info("main", "Server running on port "+PORT)
 
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)

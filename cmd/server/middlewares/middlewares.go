@@ -3,8 +3,8 @@ package middlewares
 import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"golang.org/x/time/rate"
-	"log"
 	"net/http"
 )
 
@@ -26,18 +26,17 @@ func RateLimiter(next http.Handler) http.Handler {
 
 func WriteToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		log.Printf("Request method => %s", req.Method)
-		log.Printf("Request protocol => %s", req.Proto)
-		log.Printf("Request URL => %s", req.URL)
-		log.Printf("Request HOST => %s", req.Host)
+		logger.Info("WriteToConsole", "Request path => "+req.URL.Path)
+		logger.Info("WriteToConsole", "Request method => "+req.Method)
+		logger.Info("WriteToConsole", "Request protocol => "+req.Proto)
 
 		headers := []string{"Content-Type", "Accept", "User-Agent"}
 		for _, h := range headers {
 			headerValue := req.Header.Get(h)
 			if headerValue == "" {
-				log.Printf("Request header => %s: <empty>", h)
+				logger.Info("WriteToConsole", "header not found: "+h)
 			} else {
-				log.Printf("Request header => %s: %s", h, headerValue)
+				logger.Info("WriteToConsole", h+": "+headerValue)
 			}
 		}
 
@@ -59,11 +58,12 @@ func VerifyAuthentication(next http.Handler) http.Handler {
 
 		claims, err := authentication.GetTokenInfo(rawToken)
 		if err != nil {
+			logger.Error("VerifyAuthentication", err.Error())
 			api.Error(res, req, "Invalid or expired token", err, http.StatusUnauthorized)
 			return
 		}
 
-		log.Printf("User logged in: %s", claims.Username)
+		logger.Info("VerifyAuthentication", "username: "+claims.Username)
 		next.ServeHTTP(res, req)
 	})
 }

@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
@@ -28,12 +29,14 @@ func UpdateTaskById(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	if err := api.ReadBody(req, &request); err != nil {
+		logger.Error("UpdateTaskById", err.Error())
 		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
 	id := api.PathVar(req, 1)
 	if id == "" {
+		logger.Error("UpdateTaskById", "ID is required")
 		api.Error(res, req, "ID is required", errors.New("ID is required"), http.StatusBadRequest)
 		return
 	}
@@ -41,6 +44,7 @@ func UpdateTaskById(res http.ResponseWriter, req *http.Request) {
 	task := request.ToModel()
 	task, err := repositories.UpdateTaskById(id, task)
 	if err != nil {
+		logger.Error("UpdateTaskById", err.Error())
 		api.Error(res, req, "Error while updating task", err, http.StatusInternalServerError)
 		return
 	}
