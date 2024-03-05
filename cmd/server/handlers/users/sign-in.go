@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
 	"time"
 
@@ -29,21 +30,25 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	err := json.NewDecoder(req.Body).Decode(&creds)
 	if err != nil {
+		logger.Error("SignIn", err.Error())
 		api.Error(res, req, "Malformed request", err, http.StatusBadRequest)
 		return
 	}
 
 	foundUser, err := repositories.FindUserByEmail(creds.Username)
 	if err != nil {
+		logger.Error("SignIn", err.Error())
 		api.Error(res, req, "Invalid email or password provided", err, http.StatusBadRequest)
 		return
 	} else if !foundUser.Enabled {
+		logger.Error("SignIn", "User not enabled")
 		api.Error(res, req, "You must verify your account first", err, http.StatusUnauthorized)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(creds.Password))
 	if err != nil {
+		logger.Error("SignIn", err.Error())
 		api.Error(res, req, "Wrong password provided", err, http.StatusBadRequest)
 		return
 	}
@@ -61,6 +66,7 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 
 	tokenString, err := token.SignedString(authentication.JwtKey)
 	if err != nil {
+		logger.Error("SignIn", err.Error())
 		api.Error(res, req, "Invalid request", err, http.StatusBadRequest)
 		return
 	}

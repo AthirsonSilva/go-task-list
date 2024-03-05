@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"crypto/tls"
+	"fmt"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"log"
 	"net/smtp"
@@ -22,25 +24,23 @@ var (
 
 func ListenForEmail() {
 	func() {
-		log.Println("Listening for email...")
+		logger.Info("ListenForEmail", "Listening for email...")
 		for {
 			emailData := <-EmailChannel
-			log.Printf("Sending email to: %s\n", emailData.To)
+			logger.Info("ListenForEmail", "Sending email to: "+emailData.To)
 			SendSimpleEmailMessage(emailData)
 		}
 	}()
 }
 
 func SendSimpleEmailMessage(emailData models.EmailDto) {
-	log.Println("Sending email...")
-
 	port, err := strconv.Atoi(port)
 	if err != nil {
 		log.Printf("Failed to convert port: %s\n", err)
 		return
 	}
 
-	log.Printf("Setting up smtp server: %s:%d\n", host, port)
+	logger.Info("SendSimpleEmailMessage", fmt.Sprintf("Setting up smtp server: %s:%d\n", host, port))
 
 	server := mail.NewSMTPClient()
 	server.Host = host
@@ -52,7 +52,7 @@ func SendSimpleEmailMessage(emailData models.EmailDto) {
 	server.SendTimeout = 20 * time.Second
 	server.Encryption = mail.EncryptionTLS
 
-	log.Println("Connecting to smtp server...")
+	logger.Info("SendSimpleEmailMessage", "Connecting to smtp server...")
 
 	client, err := server.Connect()
 	if err != nil {
@@ -60,7 +60,7 @@ func SendSimpleEmailMessage(emailData models.EmailDto) {
 		return
 	}
 
-	log.Println("Connected to smtp server! Sending email...")
+	logger.Info("SendSimpleEmailMessage", "Connected to smtp server! Sending email...")
 
 	email := mail.NewMSG()
 	email.SetFrom(from)
@@ -70,11 +70,11 @@ func SendSimpleEmailMessage(emailData models.EmailDto) {
 
 	err = email.Send(client)
 	if err != nil {
-		log.Printf("Failed to send mail: %s\n", err)
+		logger.Error("SendSimpleEmailMessage", fmt.Sprintf("Failed to send mail: %s\n", err))
 		return
 	}
 
-	log.Println("Email sent!")
+	logger.Info("SendSimpleEmailMessage", "Email sent!")
 }
 
 func SendVerificationEmail(emailData models.EmailDto) {

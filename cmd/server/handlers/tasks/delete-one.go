@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
 
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
@@ -25,12 +26,14 @@ func DeleteTaskById(res http.ResponseWriter, req *http.Request) {
 	var response api.Response
 
 	if id == "" {
+		logger.Error("DeleteTaskById", "ID is required")
 		api.Error(res, req, "ID is required", errors.New("ID is required"), http.StatusBadRequest)
 		return
 	}
 
 	err := repositories.DeleteTaskById(id)
 	if err != nil {
+		logger.Error("DeleteTaskById", err.Error())
 		api.Error(res, req, "Error while deleting task", err, http.StatusInternalServerError)
 		return
 	}

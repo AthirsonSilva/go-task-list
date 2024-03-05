@@ -5,6 +5,7 @@ import (
 	"fmt"
 	awsservice "github.com/AthirsonSilva/music-streaming-api/cmd/server/aws"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 	"golang.org/x/crypto/bcrypt"
@@ -19,7 +20,7 @@ import (
 //	@Accept		application/json
 //	@Produce	application/json
 //	@Param		user	formData	models.UserRequest	true	"User request"
-//	@Param		file	formData	file				false   "File"
+//	@Param		file	formData	file				false	"File"
 //	@Success	200		{object}	api.Response
 //	@Failure	500		{object}	api.Exception
 //	@Failure	400		{object}	api.Exception
@@ -48,6 +49,7 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	foundUser, err := repositories.FindUserByEmail(request.Email)
 	if err == nil && foundUser.Email != "" {
 		err = errors.New("email already in use")
+		logger.Error("SignUp", err.Error())
 		api.Error(res, req, "Given email is already in use", err, http.StatusBadRequest)
 		return
 	}
@@ -55,6 +57,7 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 	user := request.ToModel()
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
+		logger.Error("SignUp", err.Error())
 		api.Error(res, req, "Error while creating user'", err, http.StatusInternalServerError)
 		return
 	}
@@ -62,12 +65,14 @@ func SignUp(res http.ResponseWriter, req *http.Request) {
 
 	photoUrl, fileName, err := api.FileUpload(req)
 	if err != nil {
+		logger.Error("SignUp", err.Error())
 		api.Error(res, req, "Error while uploading photo", err, http.StatusInternalServerError)
 		return
 	}
 
 	user, err = repositories.CreateUser(user)
 	if err != nil {
+		logger.Error("SignUp", err.Error())
 		api.Error(res, req, "Error while creating user", err, http.StatusInternalServerError)
 		return
 	}

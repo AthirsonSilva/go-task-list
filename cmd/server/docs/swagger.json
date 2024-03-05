@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "Swagger API for Golang Project Music Streaming API",
-        "title": "TODO list Swagger API",
+        "title": "Task list Swagger API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "license": {
@@ -117,6 +117,54 @@
                         "schema": {
                             "$ref": "#/definitions/models.TaskRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Exception"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/api.Exception"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.Exception"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/export-csv": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {

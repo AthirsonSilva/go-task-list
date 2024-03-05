@@ -23,7 +23,7 @@ func setFindOptions(options *options.FindOptions, pagination api.Pagination) {
 	options.SetSort(bson.D{{Key: pagination.SortField, Value: pagination.SortDirection}})
 }
 
-func FindAllTasks(pagination api.Pagination) ([]models.Task, error) {
+func FindAllTasks(pagination api.Pagination, userID primitive.ObjectID) ([]models.Task, error) {
 	var tasks []models.Task
 	var findOptions = options.Find()
 	setFindOptions(findOptions, pagination)
@@ -31,6 +31,10 @@ func FindAllTasks(pagination api.Pagination) ([]models.Task, error) {
 	searchParams := bson.M{}
 	if pagination.SearchName != "" {
 		searchParams["title"] = bson.M{"$regex": pagination.SearchName, "$findOptions": "i"}
+	}
+
+	if userID != primitive.NilObjectID {
+		searchParams["user._id"] = userID
 	}
 
 	cursor, err := database.TaskCollection.Find(context.Background(), searchParams, findOptions)

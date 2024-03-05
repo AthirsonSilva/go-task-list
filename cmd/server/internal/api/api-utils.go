@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"io"
 	"log"
 	"net/http"
@@ -31,6 +32,13 @@ type Pagination struct {
 	SortDirection int
 	SortField     string
 	SearchName    string
+}
+
+type ErrorDetails struct {
+	Message       string
+	Precursor     string
+	OriginalError error
+	Status        int
 }
 
 func JSON(w http.ResponseWriter, data Response, status int) {
@@ -75,18 +83,18 @@ func PathVar(r *http.Request, order int) string {
 func Param(r *http.Request, param string) string {
 	u, err := url.Parse(r.URL.String())
 	if err != nil {
-		log.Println(err)
+		logger.Error("Param", err.Error())
 		return ""
 	}
 
 	queryParam := u.Query().Get(param)
 	if queryParam == "" {
 		err := fmt.Sprintf("param %s not found", param)
-		log.Println(err)
+		logger.Warning("Param", err)
 		return ""
 	}
 
-	log.Printf("Query param: %s => %s", param, queryParam)
+	logger.Info("Param", fmt.Sprintf("Query param: %s => %s", param, queryParam))
 	return queryParam
 }
 

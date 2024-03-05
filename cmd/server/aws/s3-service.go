@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"log"
 	"net/http"
 	"os"
 )
@@ -17,7 +17,7 @@ var bucketName = "todo-list-golang"
 func getClient() *s3.Client {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("getClient", "Error loading config: "+err.Error())
 	}
 
 	c := s3.NewFromConfig(cfg)
@@ -27,14 +27,14 @@ func getClient() *s3.Client {
 func PutBucketObject(key string, filePath string) (s3FilePath string, err error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Printf("Error opening file: %s", err)
+		logger.Error("PutBucketObject", "Error opening file: "+err.Error())
 		return "", err
 	}
 	defer file.Close()
 
 	fileInfo, err := file.Stat()
 	if err != nil {
-		log.Printf("Error getting file info: %s", err)
+		logger.Error("PutBucketObject", "Error getting file info: "+err.Error())
 		return "", err
 	}
 	size := fileInfo.Size()
@@ -42,7 +42,7 @@ func PutBucketObject(key string, filePath string) (s3FilePath string, err error)
 	buffer := make([]byte, size)
 	_, err = file.Read(buffer)
 	if err != nil {
-		log.Printf("Error reading file: %s", err)
+		logger.Error("PutBucketObject", "Error reading file: "+err.Error())
 		return "", err
 	}
 
@@ -58,11 +58,11 @@ func PutBucketObject(key string, filePath string) (s3FilePath string, err error)
 
 	_, err = getClient().PutObject(context.TODO(), putObject)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("PutBucketObject", "Error putting object: "+err.Error())
 		return "", err
 	}
 
 	photoUrl := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", bucketName, key)
-	log.Printf("Successfully uploaded to S3 => %s", photoUrl)
+	logger.Error("PutBucketObject", "Successfully uploaded to S3 => "+photoUrl)
 	return photoUrl, nil
 }
