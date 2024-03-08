@@ -19,11 +19,10 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Documentation with SwaggerUI      | 🟢 Ready     |
 | Pagination, sorting and searching | 🟢 Ready     |
 | Mailing service                   | 🟢 Ready     |
-| AI Recommendation service         | 🔴 Not Ready |
 | Layered architecture              | 🟢 Ready     |
 | Error Handling                    | 🟢 Ready     |
 | API versioning                    | 🟢 Ready     |
-| Excel, CSV and PDF exporting      | 🔴 Not Ready |
+| CSV and PDF exporting             | 🔴 Not Ready |
 | AWS S3 service integration        | 🟢 Ready     |
 | File upload and download          | 🟢 Ready     |
 | Rate Limiting                     | 🟢 Ready     |

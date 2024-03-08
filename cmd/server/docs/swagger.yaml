@@ -304,6 +304,35 @@ paths:
             $ref: '#/definitions/api.Exception'
       tags:
       - users
+  /api/v1/users/export-pdf/{id}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Exception'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/api.Exception'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Exception'
+      tags:
+      - users
   /api/v1/users/signin:
     post:
       consumes:

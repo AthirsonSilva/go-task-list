@@ -21,6 +21,8 @@ import (
 //	@Param		id	path		string	true	"User ID"
 //	@Router		/api/v1/users/{id} [get]
 func FindOneUserById(res http.ResponseWriter, req *http.Request) {
+	logger.Info("FindOneUserById", "Finding user by ID")
+
 	id := api.PathVar(req, 1)
 	var response api.Response
 

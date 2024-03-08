@@ -45,7 +45,7 @@ func main() {
 		Handler: routes.Routes(),
 	}
 
-	logger.Info("main", "Server running on port "+PORT)
+	logger.Info("main", "Server running on port http://localhost"+PORT)
 
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)
