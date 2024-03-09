@@ -25,7 +25,7 @@ import (
 //	@Failure	500		{object}	api.Exception
 //	@Failure	400		{object}	api.Exception
 //	@Failure	429		{object}	api.Exception
-//	@Router		/api/v1/users/signup [post]
+//	@Router		/api/v1/users/sign-up [post]
 func SignUp(res http.ResponseWriter, req *http.Request) {
 	var request models.UserRequest
 	var response api.Response

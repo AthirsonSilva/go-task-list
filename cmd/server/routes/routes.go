@@ -44,9 +44,9 @@ func TaskRoutes(router chi.Router) {
 }
 
 func UserRoutes(router chi.Router) {
-	router.Get("/{id}", users.FindOneUserById)
+	router.Get("/current-user", users.GetLoggedInUser)
 	router.Get("/verify", users.VerifyUser)
-	router.Post("/signup", users.SignUp)
-	router.Post("/signin", users.SignIn)
-	router.Get("/export-pdf/{id}", users.ExportToPdf)
+	router.Post("/sign-up", users.SignUp)
+	router.Post("/sign-in", users.SignIn)
+	router.Get("/export-pdf", users.ExportToPdf)
 }

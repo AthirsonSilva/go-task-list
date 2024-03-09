@@ -275,12 +275,12 @@ paths:
             $ref: '#/definitions/api.Exception'
       tags:
       - tasks
-  /api/v1/users/{id}:
+  /api/v1/users/current-user:
     get:
       parameters:
-      - description: User ID
-        in: path
-        name: id
+      - description: Authorization
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -304,12 +304,12 @@ paths:
             $ref: '#/definitions/api.Exception'
       tags:
       - users
-  /api/v1/users/export-pdf/{id}:
+  /api/v1/users/export-pdf:
     get:
       parameters:
-      - description: User ID
-        in: path
-        name: id
+      - description: Authorization
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -333,7 +333,7 @@ paths:
             $ref: '#/definitions/api.Exception'
       tags:
       - users
-  /api/v1/users/signin:
+  /api/v1/users/sign-in:
     post:
       consumes:
       - application/json
@@ -365,7 +365,7 @@ paths:
             $ref: '#/definitions/api.Exception'
       tags:
       - users
-  /api/v1/users/signup:
+  /api/v1/users/sign-up:
     post:
       consumes:
       - application/json

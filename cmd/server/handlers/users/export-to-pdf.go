@@ -1,11 +1,10 @@
 package handlers
 
 import (
-	"errors"
 	"fmt"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
-	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
 	pdf "github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"net/http"
 	"os"
@@ -16,27 +15,20 @@ import (
 //
 //	@Tags		users
 //	@Produce	json
-//	@Success	200	{object}	api.Response
-//	@Failure	500	{object}	api.Response
-//	@Failure	500	{object}	api.Exception
-//	@Failure	400	{object}	api.Exception
-//	@Failure	429	{object}	api.Exception
-//	@Param		id	path		string	true	"User ID"
-//	@Router		/api/v1/users/export-pdf/{id} [get]
+//	@Success	200				{object}	api.Response
+//	@Failure	500				{object}	api.Response
+//	@Failure	500				{object}	api.Exception
+//	@Failure	400				{object}	api.Exception
+//	@Failure	429				{object}	api.Exception
+//	@Param		Authorization	header		string	true	"Authorization"
+//	@Router		/api/v1/users/export-pdf [get]
 func ExportToPdf(res http.ResponseWriter, req *http.Request) {
 	logger.Info("ExportToPdf", "Exporting user to PDF")
 
-	id := api.PathVar(req, 1)
-	if id == "" {
-		logger.Error("ExportToPdf", "ID is required")
-		api.Error(res, req, "ID is required", errors.New("ID is required"), http.StatusBadRequest)
-		return
-	}
-
-	user, err := repositories.FindUserById(id)
+	user, err := authentication.GetUserFromToken(req)
 	if err != nil {
 		logger.Error("ExportToPdf", err.Error())
-		api.Error(res, req, "Error while finding user", err, http.StatusInternalServerError)
+		api.Error(res, req, "Error while getting user from token", err, http.StatusInternalServerError)
 		return
 	}
 

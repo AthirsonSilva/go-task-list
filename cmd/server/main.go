@@ -27,6 +27,7 @@ const (
 // @license.url	https://github.com/AthrsonsSilva/music-streaming-api
 // @BasePath		/
 func main() {
+	database.InitRedis()
 	database.Database.Connect()
 	defer database.Database.Client.Disconnect(context.TODO())
 

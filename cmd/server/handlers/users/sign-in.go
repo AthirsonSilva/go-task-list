@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"net/http"
@@ -23,7 +24,7 @@ import (
 //	@Failure	500		{object}	api.Exception
 //	@Failure	400		{object}	api.Exception
 //	@Failure	429		{object}	api.Exception
-//	@Router		/api/v1/users/signin [post]
+//	@Router		/api/v1/users/sign-in [post]
 func SignIn(res http.ResponseWriter, req *http.Request) {
 	var creds authentication.Credentials
 	var response api.Response
@@ -70,6 +71,8 @@ func SignIn(res http.ResponseWriter, req *http.Request) {
 		api.Error(res, req, "Invalid request", err, http.StatusBadRequest)
 		return
 	}
+
+	database.SetRedisObj(foundUser.Email, tokenString)
 
 	response = api.Response{
 		Message: "Login successful",

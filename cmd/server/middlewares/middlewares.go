@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/authentication"
+	"github.com/AthirsonSilva/music-streaming-api/cmd/server/database"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/internal/api"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"golang.org/x/time/rate"
@@ -46,19 +47,35 @@ func WriteToConsole(next http.Handler) http.Handler {
 
 func VerifyAuthentication(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		logger.Info("VerifyAuthentication", "Verifying authentication...")
+
 		rawToken, err := api.AuthToken(req)
 		if err != nil {
 			response := api.Response{
 				Message: "Unauthorized",
 				Data:    nil,
 			}
-			api.JSON(res, response, http.StatusUnauthorized)
+			api.Error(res, req, response.Message, err, http.StatusUnauthorized)
 			return
 		}
 
 		claims, err := authentication.GetTokenInfo(rawToken)
 		if err != nil {
 			logger.Error("VerifyAuthentication", err.Error())
+			api.Error(res, req, "Invalid or expired token", err, http.StatusUnauthorized)
+			return
+		}
+
+		redisToken, err := database.GetRedisObj(claims.Username)
+		if err != nil {
+			logger.Error("VerifyAuthentication", err.Error())
+			api.Error(res, req, "Invalid or expired token", err, http.StatusUnauthorized)
+			return
+		}
+
+		logger.Info("VerifyAuthentication", "redis token: "+redisToken+" | raw token: "+rawToken)
+		if redisToken != rawToken {
+			logger.Error("VerifyAuthentication", "Invalid or expired token")
 			api.Error(res, req, "Invalid or expired token", err, http.StatusUnauthorized)
 			return
 		}

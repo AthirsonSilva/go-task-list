@@ -6,10 +6,8 @@ import (
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/logger"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/models"
 	"github.com/AthirsonSilva/music-streaming-api/cmd/server/repositories"
-	"net/http"
-	"time"
-
 	"github.com/golang-jwt/jwt/v5"
+	"net/http"
 )
 
 var JwtKey = []byte("go_is_awesome")
@@ -36,16 +34,22 @@ func (c *Credentials) Valid() error {
 
 func GetTokenInfo(tokenString string) (jwtClaims Claims, err error) {
 	claims := Claims{}
-	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
+	_, err = jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 		return JwtKey, nil
 	})
 	if err != nil {
 		if errors.Is(err, jwt.ErrSignatureInvalid) {
+			return claims, errors.New("invalid token signature")
+		} else if errors.Is(err, jwt.ErrTokenMalformed) {
+			return claims, errors.New("invalid token")
+		} else if errors.Is(err, jwt.ErrTokenExpired) {
+			return claims, errors.New("token expired")
+		} else if errors.Is(err, jwt.ErrTokenNotValidYet) {
+			return claims, errors.New("token not valid yet")
+		} else if err != nil {
 			return claims, err
-		} else if !token.Valid {
-			return claims, err
-		} else if time.Until(claims.ExpiresAt.Time) < 0 {
-			return claims, err
+		} else {
+			return claims, errors.New("unknown error, the token is invalid")
 		}
 	}
 	return claims, nil
