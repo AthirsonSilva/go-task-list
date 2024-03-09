@@ -14,7 +14,7 @@ Simple Web Restful API made with Golang, MongoDB and Chi framework
 | Consistent API design             | 🟢 Ready     |
 | Use of DTOs                       | 🟢 Ready     |
 | Authentication with JWT           | 🟢 Ready     |
-| Caching with Redis                | 🔴 Not Ready |
+| Caching with Redis                | 🟢 Ready     |
 | Data generation                   | 🟢 Ready     |
 | Documentation with SwaggerUI      | 🟢 Ready     |
 | Pagination, sorting and searching | 🟢 Ready     |
